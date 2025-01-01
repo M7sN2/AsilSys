@@ -8,4 +8,7 @@ Thumbs.db
 .idea/
 .file-distribution-plan.txt
 .daily-push-progress.txt
+.30day-commit-plan.json
+.30day-commit-progress.txt
+.daily-push-status.txt
 

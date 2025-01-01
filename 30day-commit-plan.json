@@ -1,0 +1,369 @@
+{
+  "plan": [
+    {
+      "day": 1,
+      "date": "2025-01-01",
+      "type": "chore",
+      "title": "Initial project setup and configuration",
+      "description": "Set up Electron project structure, package.json, and basic configuration files",
+      "files": [
+        "package.json",
+        "package-lock.json",
+        ".gitignore",
+        "30day-commit-plan.json",
+        "setup-30day-commits.ps1",
+        "daily-push.ps1",
+        "30DAY-PUSH-GUIDE.md"
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2025-01-02",
+      "type": "chore",
+      "title": "Add Electron main process and preload scripts",
+      "description": "Implement Electron main process, window management, and preload bridge",
+      "files": [
+        "main.js",
+        "preload.js"
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2025-01-03",
+      "type": "feat",
+      "title": "Implement database layer and schema",
+      "description": "Create SQLite database manager with schema initialization and migrations",
+      "files": [
+        "database.js",
+        "migrations/"
+      ]
+    },
+    {
+      "day": 4,
+      "date": "2025-01-04",
+      "type": "style",
+      "title": "Add base styles and UI framework",
+      "description": "Create main CSS file with base styles, layout, and design system",
+      "files": [
+        "styles/main.css"
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2025-01-05",
+      "type": "feat",
+      "title": "Implement authentication system",
+      "description": "Create login page with authentication logic and session management",
+      "files": [
+        "login.html",
+        "scripts/login.js",
+        "styles/login.css",
+        "password-utils.js"
+      ]
+    },
+    {
+      "day": 6,
+      "date": "2025-01-06",
+      "type": "feat",
+      "title": "Add dashboard and navigation",
+      "description": "Create main dashboard with sidebar navigation and header",
+      "files": [
+        "index.html",
+        "scripts/dashboard.js",
+        "scripts/sidebar.js",
+        "scripts/header.js",
+        "scripts/toast.js",
+        "scripts/logout.js",
+        "styles/dashboard.css",
+        "styles/topbar.css"
+      ]
+    },
+    {
+      "day": 7,
+      "date": "2025-01-07",
+      "type": "feat",
+      "title": "Implement user management system",
+      "description": "Add user CRUD operations, user management UI, and helper functions",
+      "files": [
+        "users.html",
+        "scripts/users.js",
+        "scripts/user-helper.js"
+      ]
+    },
+    {
+      "day": 8,
+      "date": "2025-01-08",
+      "type": "feat",
+      "title": "Add permissions and access control",
+      "description": "Implement granular permission system and access control",
+      "files": [
+        "scripts/permissions.js"
+      ]
+    },
+    {
+      "day": 9,
+      "date": "2025-01-09",
+      "type": "feat",
+      "title": "Add action logging system",
+      "description": "Implement comprehensive action logging for audit trail",
+      "files": [
+        "action-logs.html",
+        "scripts/action-logs.js"
+      ]
+    },
+    {
+      "day": 10,
+      "date": "2025-01-10",
+      "type": "feat",
+      "title": "Implement product management",
+      "description": "Add product CRUD operations, categories, and inventory tracking",
+      "files": [
+        "products.html",
+        "scripts/products.js",
+        "scripts/pricelist.js",
+        "styles/products.css"
+      ]
+    },
+    {
+      "day": 11,
+      "date": "2025-01-11",
+      "type": "feat",
+      "title": "Add customer management",
+      "description": "Implement customer CRUD, balance tracking, and transaction history",
+      "files": [
+        "customers.html",
+        "scripts/customers.js",
+        "styles/customers.css"
+      ]
+    },
+    {
+      "day": 12,
+      "date": "2025-01-12",
+      "type": "feat",
+      "title": "Add supplier management",
+      "description": "Implement supplier CRUD, balance tracking, and transaction history",
+      "files": [
+        "suppliers.html",
+        "scripts/suppliers.js",
+        "styles/suppliers.css"
+      ]
+    },
+    {
+      "day": 13,
+      "date": "2025-01-13",
+      "type": "feat",
+      "title": "Implement sales invoice system",
+      "description": "Create sales invoice creation, editing, and automatic inventory updates",
+      "files": [
+        "sales.html",
+        "scripts/sales.js",
+        "styles/sales.css"
+      ]
+    },
+    {
+      "day": 14,
+      "date": "2025-01-14",
+      "type": "feat",
+      "title": "Add invoice printing and PDF export",
+      "description": "Implement invoice printing functionality and PDF generation",
+      "files": [
+        "convert-to-pdf.js",
+        "convert-receipt-to-pdf.js",
+        "convert-contract-to-pdf.js",
+        "convert-updated-catalog-to-pdf.js"
+      ]
+    },
+    {
+      "day": 15,
+      "date": "2025-01-15",
+      "type": "feat",
+      "title": "Implement purchase management",
+      "description": "Add purchase invoice creation and automatic inventory updates",
+      "files": [
+        "purchases.html",
+        "scripts/purchases.js"
+      ]
+    },
+    {
+      "day": 16,
+      "date": "2025-01-16",
+      "type": "feat",
+      "title": "Add inventory management",
+      "description": "Implement manual inventory adjustments with reason tracking",
+      "files": [
+        "inventory.html",
+        "scripts/inventory.js",
+        "styles/inventory.css"
+      ]
+    },
+    {
+      "day": 17,
+      "date": "2025-01-17",
+      "type": "feat",
+      "title": "Implement receipt management",
+      "description": "Add customer receipt creation and balance updates",
+      "files": [
+        "receipts.html",
+        "scripts/receipts.js",
+        "styles/vouchers.css"
+      ]
+    },
+    {
+      "day": 18,
+      "date": "2025-01-18",
+      "type": "feat",
+      "title": "Add payment voucher system",
+      "description": "Implement supplier payment vouchers and balance updates",
+      "files": [
+        "payments.html",
+        "scripts/payments.js"
+      ]
+    },
+    {
+      "day": 19,
+      "date": "2025-01-19",
+      "type": "feat",
+      "title": "Implement expense management",
+      "description": "Add expense tracking and categorization",
+      "files": [
+        "expenses.html",
+        "scripts/expenses.js",
+        "styles/expenses.css"
+      ]
+    },
+    {
+      "day": 20,
+      "date": "2025-01-20",
+      "type": "feat",
+      "title": "Add fixed assets management",
+      "description": "Implement fixed asset registration and depreciation calculation",
+      "files": [
+        "assets.html",
+        "scripts/assets.js",
+        "styles/assets.css"
+      ]
+    },
+    {
+      "day": 21,
+      "date": "2025-01-21",
+      "type": "feat",
+      "title": "Implement delivery notes system",
+      "description": "Add delivery note creation and linking to sales invoices",
+      "files": [
+        "delivery-notes.html",
+        "scripts/delivery-notes.js"
+      ]
+    },
+    {
+      "day": 22,
+      "date": "2025-01-22",
+      "type": "feat",
+      "title": "Add settlement management",
+      "description": "Implement settlement tracking and management",
+      "files": [
+        "settlements.html",
+        "scripts/settlements.js"
+      ]
+    },
+    {
+      "day": 23,
+      "date": "2025-01-23",
+      "type": "feat",
+      "title": "Implement sales reports",
+      "description": "Add sales reporting with daily, monthly, and yearly views",
+      "files": [
+        "reports.html",
+        "scripts/reports.js",
+        "scripts/reports-info-trigger.js",
+        "styles/reports.css"
+      ]
+    },
+    {
+      "day": 24,
+      "date": "2025-01-24",
+      "type": "feat",
+      "title": "Add financial and inventory reports",
+      "description": "Implement profit & loss, purchase, and inventory reports",
+      "files": []
+    },
+    {
+      "day": 25,
+      "date": "2025-01-25",
+      "type": "feat",
+      "title": "Add backup and restore functionality",
+      "description": "Implement automatic and manual backup system",
+      "files": [
+        "backup.html",
+        "scripts/backup.js",
+        "styles/backup.css"
+      ]
+    },
+    {
+      "day": 26,
+      "date": "2025-01-26",
+      "type": "feat",
+      "title": "Add settings and configuration",
+      "description": "Implement application settings and configuration management",
+      "files": [
+        "settings.html",
+        "scripts/settings.js",
+        "styles/settings.css"
+      ]
+    },
+    {
+      "day": 27,
+      "date": "2025-01-27",
+      "type": "feat",
+      "title": "Add utility features",
+      "description": "Implement calculator, marketing tools, and additional utilities",
+      "files": [
+        "calculator.html",
+        "scripts/calculator.js",
+        "marketing.html",
+        "scripts/marketing.js",
+        "styles/marketing.css",
+        "about.html",
+        "scripts/about.js",
+        "styles/about.css",
+        "utils/currency.js"
+      ]
+    },
+    {
+      "day": 28,
+      "date": "2025-01-28",
+      "type": "test",
+      "title": "Add unit and integration tests",
+      "description": "Implement comprehensive test suite with unit and integration tests",
+      "files": [
+        "tests/",
+        "jest.config.js"
+      ]
+    },
+    {
+      "day": 29,
+      "date": "2025-01-29",
+      "type": "chore",
+      "title": "Add assets and build configuration",
+      "description": "Add application icons, build scripts, and installer configuration",
+      "files": [
+        "assets/",
+        "build/",
+        "create-icon.js",
+        "build-installer.bat",
+        "build-installer.ps1"
+      ]
+    },
+    {
+      "day": 30,
+      "date": "2025-01-30",
+      "type": "docs",
+      "title": "Add comprehensive documentation",
+      "description": "Complete README, database schema docs, and system documentation",
+      "files": [
+        "README.md",
+        "DATABASE_SCHEMA_AR.md"
+      ]
+    }
+  ]
+}
+
