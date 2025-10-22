@@ -241,8 +241,7 @@
 **الحقول:**
 - `id` - معرف السند
 - `paymentNumber` - رقم السند (فريد)
-- `supplierId` - معرف المورد (FK → `suppliers.id` - NULL إذا كان نوع السند غير "supplier")
-- `type` - نوع السند (supplier/person/operational)
+- `supplierId` - معرف المورد (FK → `suppliers.id`)
 - `toName` - اسم المستلم
 - `date` - التاريخ
 - `amount` - المبلغ
