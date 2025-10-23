@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>الرئيسية - شركة أسيل</title>
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/reports.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <div class="top-bar-time" id="topBarTime">🕒 --:--:--</div>
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html" class="active"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <div>
+                <h1>لوحة التحكم</h1>
+                <p class="welcome-text">مرحباً بك في نظام إدارة  شركة اسيل</p>
+            </div>
+        </div>
+
+        <!-- Accounts Summary - Top Section -->
+        <div class="accounts-summary-section">
+            <div class="account-card account-receivable" id="accountsReceivableCard" title="المبالغ المستحقة للشركة في ذمة العملاء">
+                <div class="account-icon">
+                    <span class="icon">💵</span>
+                </div>
+                <div class="account-content">
+                    <div class="account-label">إجمالي الذمم المدينة</div>
+                    <div class="account-number" id="accountsReceivable">٠</div>
+                </div>
+            </div>
+
+            <div class="account-card account-payable" id="accountsPayableCard" title="المبالغ المستحقة للموردين في ذمة الشركة">
+                <div class="account-icon">
+                    <span class="icon">💸</span>
+                </div>
+                <div class="account-content">
+                    <div class="account-label">إجمالي الذمم الدائنة</div>
+                    <div class="account-number" id="accountsPayable">٠</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Access Buttons -->
+        <div class="quick-access-buttons">
+            <a href="delivery-notes.html" class="quick-access-btn payment-btn">
+                <div class="quick-access-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <div class="quick-access-content">
+                    <div class="quick-access-title">أذون الصرف</div>
+                    <div class="quick-access-subtitle">إدارة أذون الصرف</div>
+                </div>
+            </a>
+            <a href="sales.html" class="quick-access-btn sales-btn">
+                <div class="quick-access-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="quick-access-content">
+                    <div class="quick-access-title">فواتير المبيعات</div>
+                    <div class="quick-access-subtitle">إدارة المبيعات</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="stats-grid">
+            <div class="stat-card stat-primary">
+                <div class="stat-icon">
+                    <span class="icon">📦</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalProducts">0</div>
+                    <div class="stat-label">إجمالي المنتجات</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-success">
+                <div class="stat-icon">
+                    <span class="icon">✅</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="activeProducts">0</div>
+                    <div class="stat-label">منتجات نشطة</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-info">
+                <div class="stat-icon">
+                    <span class="icon">👥</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalCustomers">0</div>
+                    <div class="stat-label">إجمالي عدد العملاء</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-success">
+                <div class="stat-icon">
+                    <span class="icon">✅</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="activeCustomers">0</div>
+                    <div class="stat-label">العملاء النشطين</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-danger">
+                <div class="stat-icon">
+                    <span class="icon">❌</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="inactiveCustomers">0</div>
+                    <div class="stat-label">العملاء غير النشطين</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-danger">
+                <div class="stat-icon">
+                    <span class="icon">📦</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="inactiveProducts">0</div>
+                    <div class="stat-label">المنتجات غير النشطة</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-warning">
+                <div class="stat-icon">
+                    <span class="icon">🏢</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalSuppliers">0</div>
+                    <div class="stat-label">إجمالي  عدد الموردين</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-teal">
+                <div class="stat-icon">
+                    <span class="icon">📊</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalCategories">0</div>
+                    <div class="stat-label">الأصناف</div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-primary">
+                <div class="stat-icon">
+                    <span class="icon">💰</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="customersHighBalance">0</div>
+                    <div class="stat-label">عملاء رصيدهم تعدي 10,000 ج.م</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quick Actions & Recent Activity -->
+        <div class="dashboard-content">
+            <!-- Quick Actions -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2>إجراءات سريعة</h2>
+                    <span class="section-subtitle">الوصول السريع للميزات الأساسية</span>
+                </div>
+                <div class="quick-actions-grid">
+                    <a href="sales.html" class="quick-action-card action-primary">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">فاتورة مبيعات جديدة</div>
+                        <div class="action-description">إنشاء فاتورة مبيعات</div>
+                    </a>
+
+                    <a href="purchases.html" class="quick-action-card action-success">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">فاتورة مشتريات جديدة</div>
+                        <div class="action-description">إنشاء فاتورة مشتريات</div>
+                    </a>
+
+                    <a href="products.html" class="quick-action-card action-info">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">إضافة منتج جديد</div>
+                        <div class="action-description">إضافة منتج للمخزون</div>
+                    </a>
+
+                    <a href="customers.html" class="quick-action-card action-warning">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">إضافة عميل جديد</div>
+                        <div class="action-description">إضافة عميل جديد</div>
+                    </a>
+
+                    <a href="receipts.html" class="quick-action-card action-teal">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">سند قبض جديد</div>
+                        <div class="action-description">إنشاء سند قبض</div>
+                    </a>
+
+                    <a href="inventory.html" class="quick-action-card action-primary">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3h18v18H3zM3 9h18M9 3v18"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">جرد المخزون</div>
+                        <div class="action-description">تعديل المخزون</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Reports Quick Access -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2> التقارير</h2>
+                    <span class="section-subtitle">الوصول السريع للتقارير</span>
+                </div>
+                <div class="quick-actions-grid">
+                    <div class="quick-action-card action-success" data-report-type="current-month" style="cursor: pointer; order: -1;">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">تقرير الشهر الحالي</div>
+                        <div class="action-description">عرض تقرير شامل للشهر الحالي</div>
+                    </div>
+
+                    <div class="quick-action-card action-info" data-report-url="action-logs.html?tab=customer-statement" style="cursor: pointer;">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">كشف حساب عميل</div>
+                        <div class="action-description">عرض كشف حساب للعميل</div>
+                    </div>
+
+                    <div class="quick-action-card action-warning" data-report-url="action-logs.html?tab=supplier-statement" style="cursor: pointer;">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">كشف حساب مورد</div>
+                        <div class="action-description">عرض كشف حساب للمورد</div>
+                    </div>
+
+                    <div class="quick-action-card action-success" data-report-url="action-logs.html?tab=inventory-movement" style="cursor: pointer;">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3h18v18H3zM3 9h18M9 3v18"/>
+                                <path d="M9 9h6M9 15h6"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">كشف حركة المخزون</div>
+                        <div class="action-description">عرض حركة المخزون</div>
+                    </div>
+
+                    <div class="quick-action-card action-teal" data-report-url="action-logs.html?tab=product-movement" style="cursor: pointer;">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 0 1-8 0"/>
+                                <path d="M9 18l3-3 3 3"/>
+                            </svg>
+                        </div>
+                        <div class="action-title">كشف حركة منتج</div>
+                        <div class="action-description">عرض حركة منتج معين</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- High Balance Customers -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2>عملاء تجاوز رصيدهم 10,000 ج.م</h2>
+                    <span class="section-subtitle">قائمة العملاء ذوي الرصيد المرتفع</span>
+                </div>
+                <div class="recent-table-container">
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الهاتف</th>
+                                <th>الرصيد</th>
+                                <th>آخر معاملة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="highBalanceCustomersTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: #999;">
+                                    جاري تحميل البيانات...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Inactive Customers and Products -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2>العملاء والمنتجات غير النشطة</h2>
+                    <span class="section-subtitle">مراجعة العملاء والمنتجات التي تحتاج إلى متابعة</span>
+                </div>
+                <div class="inactive-tables-container">
+                    <!-- Inactive Customers Table -->
+                    <div class="inactive-table-wrapper">
+                        <div class="inactive-table-header">
+                            <h3>❌ العملاء غير النشطين</h3>
+                        </div>
+                        <div class="recent-table-container">
+                            <table class="recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>الهاتف</th>
+                                        <th>الرصيد</th>
+                                        <th>آخر معاملة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inactiveCustomersTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 40px; color: #999;">
+                                            جاري تحميل البيانات...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Inactive Products Table -->
+                    <div class="inactive-table-wrapper">
+                        <div class="inactive-table-header">
+                            <h3>❌ المنتجات غير النشطة</h3>
+                        </div>
+                        <div class="recent-table-container">
+                            <table class="recent-table">
+                                <thead>
+                                    <tr>
+                                        <th>اسم المنتج</th>
+                                        <th>الصنف</th>
+                                        <th>المخزون</th>
+                                        <th>آخر بيع</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inactiveProductsTableBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 40px; color: #999;">
+                                            جاري تحميل البيانات...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Best Selling Products -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2>إحصائيات مبيعات اليوم</h2>
+                
+                    <span class="section-subtitle"> مرتبة حسب الاكثر مبيعا </span>
+                </div>
+                <div class="recent-table-container">
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>اسم المنتج</th>
+                                <th>الصنف</th>
+                                <th>الكمية المباعة</th>
+                                <th>إجمالي المبيعات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="todayBestSellingTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: #999;">
+                                    جاري تحميل البيانات...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2>الفواتير الأخيرة</h2>
+                    <span class="section-subtitle"> فواتير المبيعات الحديثة</span>
+                </div>
+                <div class="recent-table-container">
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الفاتورة</th>
+                                <th>العميل</th>
+                                <th>التاريخ</th>
+                                <th>المبلغ</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentSalesTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                                    جاري تحميل البيانات...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Load header.js first to initialize top bar -->
+    <script src="scripts/header.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/calculator.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    
+</body>
+</html>
