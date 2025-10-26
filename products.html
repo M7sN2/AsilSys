@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>إدارة المنتجات - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/products.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <div class="top-bar-time" id="topBarTime">🕒 --:--:--</div>
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html" class="active"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1>إدارة المنتجات</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" id="manageCategoriesBtn">
+                    <span>📁</span> إدارة الأصناف
+                </button>
+                <button class="btn btn-primary" id="addProductBtn">
+                    <span>+</span> إضافة منتج جديد
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 البحث بالاسم أو المخزون...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filter-group">
+                <select id="categoryFilter">
+                    <option value="">جميع الأصناف</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">جميع الحالات</option>
+                    <option value="active">نشط</option>
+                    <option value="inactive">غير نشط</option>
+                </select>
+                <select id="stockFilter">
+                    <option value="">جميع المخزون</option>
+                    <option value="zero">مخزون صفر</option>
+                    <option value="low">مخزون منخفض (&lt; 150)</option>
+                    <option value="medium">مخزون متوسط (150-300)</option>
+                    <option value="high">مخزون عالي (&gt; 300)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>كود المنتج</th>
+                        <th>اسم المنتج</th>
+                        <th>الصنف</th>
+                        <th>أصغر وحدة</th>
+                        <th>أكبر وحدة</th>
+                        <th>المخزون</th>
+                        <th>سعر أصغر وحدة</th>
+                        <th>سعر أكبر وحدة</th>
+                        <th>الحالة</th>
+                        <th>أنشأه</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <!-- Products will be loaded here -->
+                </tbody>
+            </table>
+            <div class="empty-state hidden" id="emptyState">
+                <p>لا توجد منتجات</p>
+                <button class="btn btn-primary" id="emptyStateAddBtn">
+                    إضافة منتج جديد
+                </button>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container hidden" id="paginationContainer">
+            <div class="pagination-info">
+                <span id="paginationInfo">عرض 0 - 0 من 0</span>
+            </div>
+            <div class="pagination-controls">
+                <button type="button" id="prevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
+                <span class="page-numbers" id="pageNumbers"></span>
+                <button type="button" id="nextPageBtn" class="btn btn-secondary" disabled>التالي →</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">إضافة منتج جديد</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="productForm" class="product-form">
+                <input type="hidden" id="productId" name="productId">
+                <input type="hidden" id="isEdit" name="isEdit" value="false">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCode">كود المنتج <span class="required">*</span></label>
+                        <input type="text" id="productCode" name="productCode" readonly>
+                        <small>يتم إنشاؤه تلقائياً</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">الصنف <span class="required">*</span></label>
+                        <select id="category" name="category" required>
+                            <option value="">اختر الصنف</option>
+                        </select>
+                        <small>يمكنك إضافة أصناف جديدة من زر "إدارة الأصناف"</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج <span class="required">*</span></label>
+                        <input type="text" id="productName" name="productName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="smallestUnit">أصغر وحدة بيع <span class="required">*</span></label>
+                        <input type="text" id="smallestUnit" name="smallestUnit" placeholder="مثال: قطعة" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="largestUnit">أكبر وحدة بيع <span class="required">*</span></label>
+                        <input type="text" id="largestUnit" name="largestUnit" placeholder="مثال: كرتونة" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="conversionFactor">معامل التحويل <span class="required">*</span></label>
+                        <input type="number" id="conversionFactor" name="conversionFactor" 
+                               placeholder="كم أصغر وحدة في أكبر وحدة" min="0" step="1" required>
+                        <small>مثال: إذا كان الكرتونة = 12 قطعة، أدخل 12</small>
+                    </div>
+                </div>
+
+                <div class="form-row" id="openingStockRow">
+                    <div class="form-group">
+                        <label for="openingStock">المخزون الافتتاحي</label>
+                        <input type="number" id="openingStock" name="openingStock" 
+                               min="0" step="0.01" placeholder="يُضاف فقط عند الإضافة الأولى">
+                        <small>بالأصغر وحدة بيع - يُضاف فقط عند إضافة المنتج لأول مرة</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentStock">المخزون الحالي</label>
+                        <input type="number" id="currentStock" name="currentStock" 
+                               readonly style="background: #f5f5f5;">
+                        <small>يتم تحديثه من المشتريات والجرد والمبيعات</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="priceSmallestUnit">سعر أصغر وحدة بيع <span class="required">*</span></label>
+                        <input type="number" id="priceSmallestUnit" name="priceSmallestUnit" 
+                               min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceLargestUnit">سعر أكبر وحدة بيع <span class="required">*</span></label>
+                        <input type="number" id="priceLargestUnit" name="priceLargestUnit" 
+                               min="0" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="notes">ملاحظات</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="أي ملاحظات إضافية عن المنتج"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">الحالة</label>
+                        <select id="status" name="status">
+                            <option value="active">نشط</option>
+                            <option value="inactive">غير نشط</option>
+                        </select>
+                        <small>الحالة تتغير تلقائياً حسب الاستخدام في فواتير المبيعات</small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>تفاصيل المنتج</h2>
+                <button class="modal-close" id="closeDetailsModal">&times;</button>
+            </div>
+            <div id="productDetails" class="product-details">
+                <!-- Details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Management Modal -->
+    <div class="modal" id="categoriesModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>إدارة الأصناف</h2>
+                <button class="modal-close" id="closeCategoriesModal">&times;</button>
+            </div>
+            <div class="categories-management">
+                <div class="add-category-section">
+                    <h3>إضافة صنف جديد</h3>
+                    <div class="add-category-form">
+                        <input type="text" id="newCategoryName" placeholder="اسم الصنف الجديد" maxlength="50">
+                        <button class="btn btn-primary" id="addCategoryBtn">إضافة</button>
+                    </div>
+                </div>
+                <div class="categories-list-section">
+                    <h3>الأصناف الحالية</h3>
+                    <div id="categoriesList" class="categories-list">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                    <div class="empty-state hidden" id="categoriesEmptyState">
+                        <p>لا توجد أصناف</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/toast.js"></script>
+    <!-- Load header.js first to initialize top bar -->
+    <script src="scripts/header.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/user-helper.js"></script>
+    <script src="scripts/products.js"></script>
+    
+</body>
+</html>
+
