@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الشريط العلوي</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <div class="top-bar-time" id="topBarTime">🕒 --:--:--</div>
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+        </div>
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <div style="padding: 100px 50px; text-align: center;">
+        <h1>اختبار الشريط العلوي</h1>
+        <p>يجب أن تعمل الساعة واسم المستخدم في الشريط العلوي</p>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 8px;">
+            <h3>بيانات LocalStorage:</h3>
+            <p>asel_loggedIn: <span id="loggedInStatus">--</span></p>
+            <p>asel_user: <span id="username">--</span></p>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button onclick="testLogin()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+                تسجيل دخول تجريبي
+            </button>
+            <button onclick="testLogout()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; margin-left: 10px;">
+                تسجيل خروج
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        function testLogin() {
+            localStorage.setItem('asel_loggedIn', 'true');
+            localStorage.setItem('asel_user', 'محمد');
+            console.log('تم تسجيل الدخول التجريبي');
+            updateDisplay();
+            // Trigger update
+            if (typeof updateUserGreeting === 'function') {
+                updateUserGreeting();
+            }
+        }
+
+        function testLogout() {
+            localStorage.removeItem('asel_loggedIn');
+            localStorage.removeItem('asel_user');
+            console.log('تم تسجيل الخروج');
+            updateDisplay();
+            // Trigger update
+            if (typeof updateUserGreeting === 'function') {
+                updateUserGreeting();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('loggedInStatus').textContent = localStorage.getItem('asel_loggedIn') || 'غير مسجل';
+            document.getElementById('username').textContent = localStorage.getItem('asel_user') || 'لا يوجد';
+        }
+
+        // Update display on load
+        window.addEventListener('load', () => {
+            updateDisplay();
+            console.log('تم تحميل الصفحة');
+        });
+    </script>
+
+    <script src="scripts/header.js"></script>
+</body>
+</html>
+
