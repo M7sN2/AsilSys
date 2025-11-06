@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>إدارة الجرد والمرتجعات - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/inventory.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        /* Tabs Styles */
+        .tabs-container {
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 12px;
+        }
+        
+        .tab-btn {
+            padding: 14px 28px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+        
+        .tab-btn:hover {
+            color: #8b4513;
+            background: rgba(139, 69, 19, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #8b4513 0%, #5a2a12 100%);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html" class="active"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1>إدارة الجرد والمرتجعات</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" id="refreshBtn" title="تحديث البيانات">
+                    <span>🔄</span> تحديث
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container" style="margin-bottom: 20px;">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="adjustment" id="adjustmentTabBtn">جرد</button>
+                <button class="tab-btn" data-tab="return" id="returnTabBtn">مرتجع</button>
+            </div>
+        </div>
+
+        <!-- Tab 1: Inventory Adjustments -->
+        <div class="tab-content active" id="adjustment-tab">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">عمليات الجرد</h2>
+                <button class="btn btn-primary" id="newAdjustmentBtn">
+                    <span>+</span> عملية جرد جديدة
+                </button>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <input type="text" id="adjustmentSearchInput" placeholder="بحث في المنتجات...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-group">
+                    <select id="adjustmentCategoryFilter">
+                        <option value="">جميع الأصناف</option>
+                    </select>
+                    <select id="adjustmentStatusFilter">
+                        <option value="">جميع الحالات</option>
+                        <option value="active">نشط</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Inventory Adjustments Table -->
+            <div class="table-container">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>رقم العملية</th>
+                            <th>التاريخ</th>
+                            <th>المنتج</th>
+                            <th>المخزون قبل</th>
+                            <th>نوع التعديل</th>
+                            <th>الكمية</th>
+                            <th>المخزون بعد</th>
+                            <th>السبب</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adjustmentTableBody">
+                        <!-- Inventory adjustments will be loaded here -->
+                    </tbody>
+                </table>
+                <div class="empty-state hidden" id="adjustmentEmptyState">
+                    <p>لا توجد عمليات جرد</p>
+                    <button class="btn btn-primary" id="adjustmentEmptyStateAddBtn">
+                        عملية جرد جديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container hidden" id="adjustmentPaginationContainer">
+                <div class="pagination-info">
+                    <span id="adjustmentPaginationInfo">عرض 0 - 0 من 0</span>
+                </div>
+                <div class="pagination-controls">
+                    <button type="button" id="adjustmentPrevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
+                    <span class="page-numbers" id="adjustmentPageNumbers"></span>
+                    <button type="button" id="adjustmentNextPageBtn" class="btn btn-secondary" disabled>التالي →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Returns -->
+        <div class="tab-content" id="return-tab">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">عمليات المرتجع</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" id="viewBlankReturnBtn">
+                        👁️ عرض مستند إرجاع فارغ
+                    </button>
+                    <button class="btn btn-secondary" id="printBlankReturnBtn">
+                        🖨️ طباعة مستند إرجاع فارغ
+                    </button>
+                    <button class="btn btn-primary" id="newReturnBtn">
+                        <span>+</span> عملية مرتجع جديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <input type="text" id="returnSearchInput" placeholder="بحث في المنتجات...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-group">
+                    <select id="returnCategoryFilter">
+                        <option value="">جميع الأصناف</option>
+                    </select>
+                    <select id="returnStatusFilter">
+                        <option value="">جميع الحالات</option>
+                        <option value="active">نشط</option>
+                        <option value="inactive">غير نشط</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Returns Table -->
+            <div class="table-container">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>رقم المرتجع</th>
+                            <th>التاريخ</th>
+                            <th>نوع المرتجع</th>
+                            <th>المنتج</th>
+                            <th>الكمية</th>
+                            <th>سعر الوحدة</th>
+                            <th>المبلغ الإجمالي</th>
+                            <th>سبب المرتجع</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="returnTableBody">
+                        <!-- Returns will be loaded here -->
+                    </tbody>
+                </table>
+                <div class="empty-state hidden" id="returnEmptyState">
+                    <p>لا توجد عمليات مرتجع</p>
+                    <button class="btn btn-primary" id="returnEmptyStateAddBtn">
+                        عملية مرتجع جديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container hidden" id="returnPaginationContainer">
+                <div class="pagination-info">
+                    <span id="returnPaginationInfo">عرض 0 - 0 من 0</span>
+                </div>
+                <div class="pagination-controls">
+                    <button type="button" id="returnPrevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
+                    <span class="page-numbers" id="returnPageNumbers"></span>
+                    <button type="button" id="returnNextPageBtn" class="btn btn-secondary" disabled>التالي →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Adjustment Modal (for Inventory Adjustments) -->
+    <div class="modal" id="adjustmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="adjustmentModalTitle">عملية جرد جديدة</h2>
+                <button class="modal-close" id="closeAdjustmentModal">&times;</button>
+            </div>
+            <form id="adjustmentForm" class="inventory-form">
+                <input type="hidden" id="adjustmentId" name="adjustmentId">
+                <input type="hidden" id="adjustmentIsEdit" name="adjustmentIsEdit" value="false">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adjustmentDate">التاريخ <span class="required">*</span></label>
+                        <input type="date" id="adjustmentDate" name="adjustmentDate" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adjustmentProductSelect">اختر المنتج <span class="required">*</span></label>
+                        <select id="adjustmentProductSelect" name="adjustmentProductSelect" required>
+                            <option value="">اختر المنتج</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="adjustmentProductInfo" class="product-info hidden">
+                    <div class="info-item">
+                        <span class="info-label">المخزون الحالي:</span>
+                        <span class="info-value" id="adjustmentCurrentStock">0</span>
+                        <span id="adjustmentProductUnit"></span>
+                    </div>
+                </div>
+
+                <div class="form-row" id="adjustmentTypeRow">
+                    <div class="form-group">
+                        <label for="adjustmentType">نوع التعديل <span class="required">*</span></label>
+                        <select id="adjustmentType" name="adjustmentType">
+                            <option value="increase">زيادة</option>
+                            <option value="decrease">نقصان</option>
+                            <option value="set">تحديد قيمة معينة</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjustmentAmount">الكمية <span class="required">*</span></label>
+                        <input type="number" id="adjustmentAmount" name="adjustmentAmount" 
+                               min="0" step="0.01" required>
+                        <small id="adjustmentAmountHint">كمية الزيادة أو النقصان</small>
+                    </div>
+                </div>
+
+                <div class="form-row" id="adjustmentNewStockRow" style="display: none;">
+                    <div class="form-group full-width">
+                        <label for="adjustmentNewStock">المخزون الجديد</label>
+                        <input type="number" id="adjustmentNewStock" name="adjustmentNewStock" 
+                               min="0" step="0.01" readonly style="background: #f5f5f5;">
+                        <small>سيتم تحديثه تلقائياً</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="adjustmentReason">سبب التعديل <span class="required">*</span></label>
+                        <input type="text" id="adjustmentReason" name="adjustmentReason" 
+                               placeholder="مثال: جرد دوري، تالف..." required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="adjustmentNotes">ملاحظات</label>
+                        <textarea id="adjustmentNotes" name="adjustmentNotes" rows="3" placeholder="أي ملاحظات إضافية"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">حفظ العملية</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Return Modal (for Returns) -->
+    <div class="modal" id="returnModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="returnModalTitle">عملية مرتجع جديدة</h2>
+                <button class="modal-close" id="closeReturnModal">&times;</button>
+            </div>
+            <form id="returnForm" class="inventory-form">
+                <input type="hidden" id="returnId" name="returnId">
+                <input type="hidden" id="returnIsEdit" name="returnIsEdit" value="false">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="returnDate">التاريخ <span class="required">*</span></label>
+                        <input type="date" id="returnDate" name="returnDate" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="returnType">نوع المرتجع <span class="required">*</span></label>
+                        <select id="returnType" name="returnType" required>
+                            <option value="">اختر نوع المرتجع</option>
+                            <option value="from_customer">مرتجع من عميل</option>
+                            <option value="to_supplier">مرتجع إلى مورد</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="returnEntitySelectGroup" style="display: none;">
+                        <label id="returnEntityLabel">اختر <span class="required">*</span></label>
+                        <select id="returnEntitySelect" name="returnEntitySelect">
+                            <option value="">اختر</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" id="restoreBalanceRow" style="display: none;">
+                    <div class="form-group full-width">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="restoreBalance" name="restoreBalance" style="width: 20px; height: 20px; cursor: pointer;">
+                            <span id="restoreBalanceLabel">استعادة الرصيد في حساب العميل</span>
+                        </label>
+                        <small id="restoreBalanceHint">إذا تم تحديد هذا الخيار، سيتم خصم قيمة المرتجع من رصيد العميل</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="returnProductSelect">اختر المنتج <span class="required">*</span></label>
+                        <select id="returnProductSelect" name="returnProductSelect" required>
+                            <option value="">اختر المنتج</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="returnUnit">الوحدة</label>
+                        <input type="text" id="returnUnit" name="returnUnit" readonly style="background: #f5f5f5;">
+                        <small>وحدة قياس المنتج</small>
+                    </div>
+                </div>
+
+                <div class="form-row" id="returnQuantityRow">
+                    <div class="form-group">
+                        <label for="returnQuantity">الكمية المرتجعة <span class="required">*</span></label>
+                        <input type="number" id="returnQuantity" name="returnQuantity" 
+                               min="0" step="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="returnUnitPrice">سعر الوحدة <span class="required">*</span></label>
+                        <input type="number" id="returnUnitPrice" name="returnUnitPrice" 
+                               min="0" step="0.01" placeholder="0.00" required>
+                        <small>يتم استخدامه لحساب قيمة المرتجع</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="returnReason">سبب المرتجع <span class="required">*</span></label>
+                        <select id="returnReason" name="returnReason" required>
+                            <option value="">اختر سبب المرتجع</option>
+                            <option value="damaged">تالف</option>
+                            <option value="defective">معيب</option>
+                            <option value="wrong_item">صنف خاطئ</option>
+                            <option value="expired">منتهي الصلاحية</option>
+                            <option value="customer_request">طلب العميل</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                        <small id="returnReasonHint">إذا كان السبب "تالف" أو "منتهي الصلاحية" لن يتم إعادة الكمية للمخزون</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="returnNotes">ملاحظات</label>
+                        <textarea id="returnNotes" name="returnNotes" rows="3" placeholder="أي ملاحظات إضافية"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">حفظ المرتجع</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/header.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/inventory.js"></script>
+</body>
+</html>
+

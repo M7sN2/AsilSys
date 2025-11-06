@@ -1,0 +1,477 @@
+/* ===================================
+   Modern Inventory Design 2025
+   =================================== */
+
+:root {
+    --primary: #8b4513;
+    --secondary: #cd853f;
+    --accent: #dc2626;
+    --success: #10b981;
+    --error: #ef4444;
+    --info: #3b82f6;
+}
+
+/* ===================================
+   Filters Section - Modern
+   =================================== */
+
+.filters-section {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    min-width: 280px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 50px 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    background: #f8fafc;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+        0 0 0 4px rgba(99, 102, 241, 0.1),
+        0 4px 12px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.125rem;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.filter-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-group select {
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    cursor: pointer;
+    background: #f8fafc;
+    min-width: 160px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.filter-group select:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+        0 0 0 4px rgba(99, 102, 241, 0.1),
+        0 4px 12px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+/* ===================================
+   Table Container
+   =================================== */
+
+.table-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    overflow: auto;
+    border: 1px solid #f1f5f9;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+.inventory-table thead {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 3px solid #8b4513;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.inventory-table th {
+    padding: 18px 22px;
+    text-align: right;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    position: relative;
+    background: transparent;
+    transition: all 0.3s ease;
+    border-bottom: none;
+}
+
+.inventory-table th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #8b4513 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.inventory-table thead tr:hover th::after {
+    opacity: 1;
+}
+
+.inventory-table th:first-child {
+    padding-right: 24px;
+}
+
+.inventory-table th:last-child {
+    padding-left: 24px;
+}
+
+.inventory-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+    color: #475569;
+    transition: background 0.2s ease;
+}
+
+.inventory-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.inventory-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.005);
+}
+
+.inventory-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===================================
+   Adjustment Badges
+   =================================== */
+
+.adjustment-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.adjustment-badge.increase {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+    border: 1px solid #10b981;
+}
+
+.adjustment-badge.decrease {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border: 1px solid #ef4444;
+}
+
+.adjustment-badge.set {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1e40af;
+    border: 1px solid #3b82f6;
+}
+
+/* ===================================
+   Action Buttons
+   =================================== */
+
+.actions-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn.view {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    color: #1e40af;
+    border: 1px solid #60a5fa;
+}
+
+.action-btn.view:hover {
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+}
+
+.action-btn.delete {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border: 1px solid #f87171;
+}
+
+.action-btn.delete:hover {
+    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* ===================================
+   Empty State
+   =================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #94a3b8;
+}
+
+.empty-state p {
+    font-size: 1.125rem;
+    margin-bottom: 24px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+/* ===================================
+   Inventory Form - Modern
+   =================================== */
+
+.inventory-form {
+    padding: 32px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group.full-width {
+    flex: 1 1 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+}
+
+.form-group .required {
+    color: var(--error);
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    background: #f8fafc;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+        0 0 0 4px rgba(99, 102, 241, 0.1),
+        0 4px 12px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+.form-group input[readonly] {
+    background: #f1f5f9;
+    cursor: not-allowed;
+    color: #64748b;
+}
+
+.form-group textarea {
+    resize: vertical;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    min-height: 100px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 0.8125rem;
+    font-weight: 400;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 2px solid #f1f5f9;
+    flex-wrap: wrap;
+}
+
+.product-info {
+    margin-top: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.875rem;
+}
+
+.info-value {
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ===================================
+   Inventory Table Cells - Bold and Larger
+   =================================== */
+
+.product-name-cell strong,
+.reason-cell strong,
+.old-stock-cell strong,
+.new-stock-cell strong {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1e293b;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-group {
+        min-width: 100%;
+    }
+
+    .inventory-table {
+        font-size: 0.75rem;
+    }
+
+    .inventory-table th,
+    .inventory-table td {
+        padding: 10px 12px;
+    }
+    
+    .filters-section {
+        flex-direction: column;
+    }
+    
+    .search-box {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .filter-group select {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .inventory-form {
+        padding: 24px;
+    }
+}
