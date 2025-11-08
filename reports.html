@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>حساب الأرباح - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/reports.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        /* Hide calculation explanation by default */
+        .hover-explanation {
+            display: none;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.3s ease, max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+        }
+        
+        /* Info trigger icon */
+        .info-trigger {
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 1.1em;
+            color: #007bff;
+            transition: color 0.2s ease, transform 0.2s ease;
+            vertical-align: middle;
+        }
+        
+        .info-trigger:hover {
+            color: #0056b3;
+            transform: scale(1.2);
+        }
+        
+        /* Show explanation when hovering over info trigger or parent */
+        .tab-description:hover .hover-explanation,
+        .info-trigger:hover ~ .hover-explanation,
+        .hover-explanation:hover {
+            display: block;
+            opacity: 1;
+            max-height: 5000px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        
+        /* Alternative: Show on click */
+        .info-trigger.active + .hover-explanation,
+        .info-trigger.active ~ .hover-explanation {
+            display: block;
+            opacity: 1;
+            max-height: 5000px;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html" class="active"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <div>
+                <h1>حساب الأرباح</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="printReportBtn" title="طباعة التقرير">
+                    <span>🖨️</span> طباعة التقرير
+                </button>
+                <button class="btn btn-secondary" id="saveReportPdfBtn" title="حفظ التقرير كـ PDF">
+                    <span>💾</span> حفظ PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="fromDate">من تاريخ</label>
+                <input type="date" id="fromDate" class="filter-input">
+            </div>
+            <div class="filter-group">
+                <label for="toDate">إلى تاريخ</label>
+                <input type="date" id="toDate" class="filter-input">
+            </div>
+            <div class="filter-group">
+                <label for="customerFilter">حسب العميل</label>
+                <select id="customerFilter" class="filter-select">
+                    <option value="">جميع العملاء</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="categoryFilter">حسب التصنيف/المنتج</label>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">جميع التصنيفات والمنتجات</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button class="btn btn-primary" id="applyFiltersBtn">تطبيق الفلاتر</button>
+                <button class="btn btn-secondary" id="resetFiltersBtn">إعادة تعيين</button>
+            </div>
+        </div>
+
+        <!-- Info Note Section -->
+        <div class="info-note-section">
+            <div class="info-note">
+                <div class="info-note-icon">ℹ️</div>
+                <div class="info-note-content">
+                    <h3>
+                        ملاحظة مهمة: كيفية حساب متوسط سعر الشراء
+                        <span class="hover-hint">(مرر الماوس للتفاصيل)</span>
+                    </h3>
+                    <p>
+                        يتم حساب <strong>متوسط سعر الشراء</strong> باستخدام طريقة <strong>المتوسط المرجح (Weighted Average)</strong>:
+                    </p>
+                    <ul>
+                        <li>يتم جمع جميع عمليات الشراء للمنتج (سعر الشراء × الكمية)</li>
+                        <li>يتم حساب المتوسط بقسمة <strong>إجمالي التكلفة ÷ إجمالي الكمية</strong></li>
+                        <li>عند حساب ربح عملية بيع معينة، يتم استخدام فقط المشتريات التي حدثت <strong>قبل تاريخ البيع أو في نفس اليوم</strong></li>
+                    </ul>
+                    <p class="example-text">
+                        <strong>مثال:</strong> إذا تم شراء منتج 3 مرات (5 وحدات بسعر 1000 ج.م، 3 وحدات بسعر 1100 ج.م، 2 وحدات بسعر 1200 ج.م)، 
+                        يكون المتوسط = (5000 + 3300 + 2400) ÷ 10 = <strong>1070 ج.م</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards Section -->
+        <div class="kpi-cards-section">
+            <div class="kpi-card sales">
+                <div class="kpi-icon">💰</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">إجمالي المبيعات</div>
+                    <div class="kpi-description">مجموع قيمة جميع فواتير المبيعات في الفترة المحددة</div>
+                    <div class="kpi-value" id="totalSales">٠</div>
+                </div>
+            </div>
+            <div class="kpi-card cogs">
+                <div class="kpi-icon">📦</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">تكلفة البضاعة المباعة</div>
+                    <div class="kpi-description">تكلفة شراء المنتجات التي تم بيعها (متوسط سعر الشراء × الكمية المباعة)</div>
+                    <div class="kpi-value" id="totalCOGS">٠</div>
+                </div>
+            </div>
+            <div class="kpi-card gross-profit">
+                <div class="kpi-icon">📈</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">إجمالي الربح</div>
+                    <div class="kpi-description">الربح قبل خصم المصاريف (إجمالي المبيعات - تكلفة البضاعة المباعة)</div>
+                    <div class="kpi-value" id="grossProfit">٠</div>
+                </div>
+            </div>
+            <div class="kpi-card expenses">
+                <div class="kpi-icon">💸</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">المصاريف التشغيلية</div>
+                    <div class="kpi-description">جميع المصاريف التشغيلية في الفترة المحددة (رواتب، إيجار، فواتير، إلخ)</div>
+                    <div class="kpi-value" id="totalExpenses">٠</div>
+                </div>
+            </div>
+            <div class="kpi-card net-profit">
+                <div class="kpi-icon">✅</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">صافي الربح</div>
+                    <div class="kpi-description">الربح النهائي بعد خصم جميع التكاليف (إجمالي الربح - المصاريف التشغيلية)</div>
+                    <div class="kpi-value" id="netProfit">٠</div>
+                </div>
+            </div>
+            <div class="kpi-card margin">
+                <div class="kpi-icon">📊</div>
+                <div class="kpi-content">
+                    <div class="kpi-label">نسبة هامش الربح</div>
+                    <div class="kpi-description">نسبة الربحية من المبيعات (صافي الربح ÷ إجمالي المبيعات × 100)</div>
+                    <div class="kpi-value" id="profitMargin">٠٪</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="products">
+                    <span>📦</span> ربح المنتجات
+                </button>
+                <button class="tab-btn" data-tab="customers-profit">
+                    <span>👥</span> ربح العملاء
+                </button>
+                <button class="tab-btn" data-tab="suppliers-profit">
+                    <span>🏢</span> ربح الموردين
+                </button>
+                <button class="tab-btn" data-tab="alerts">
+                    <span>⚠️</span> التنبيهات
+                </button>
+            </div>
+
+            <div class="tabs-content">
+                <!-- Products Profit Tab -->
+                <div class="tab-panel active" id="products-tab">
+                    <div class="tab-description">
+                        <p>📦 <strong>ربح المنتجات:</strong> يعرض هذا الجدول ربح كل منتج بشكل منفصل. يمكنك رؤية الكمية المباعة، متوسط تكلفة الشراء، متوسط سعر البيع، إجمالي التكلفة، إجمالي المبيعات، الربح، ونسبة الربح لكل منتج.</p>
+                    </div>
+                    <div class="table-container">
+                        <table class="profit-table">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>إجمالي الكمية المباعة</th>
+                                    <th>متوسط تكلفة الشراء</th>
+                                    <th>متوسط سعر البيع</th>
+                                    <th>إجمالي التكلفة</th>
+                                    <th>إجمالي البيع</th>
+                                    <th>الربح</th>
+                                    <th>نسبة الربح</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsProfitTableBody">
+                                <tr>
+                                    <td colspan="8" class="empty-state">يرجى تطبيق الفلاتر لعرض البيانات</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Customers Profit Tab -->
+                <div class="tab-panel" id="customers-profit-tab">
+                    <div class="tab-description">
+                        <p>👥 <strong>ربح العملاء:</strong> يعرض هذا الجدول ربح كل عميل. يمكنك رؤية إجمالي المبيعات لكل عميل، تكلفة البضاعة المباعة له، الربح المحقق منه، ونسبة الربح. يساعدك هذا على معرفة أي العملاء أكثر ربحية. 
+                        <span class="info-trigger" title="اضغط لعرض التوضيح">ℹ️</span>
+                        </p>
+                        <div class="calculation-explanation hover-explanation">
+                            <h4>📊 كيفية حساب الربح المحقق من العميل:</h4>
+                            <ol>
+                                <li><strong>إجمالي المبيعات:</strong> مجموع قيمة جميع فواتير المبيعات للعميل في الفترة المحددة</li>
+                                <li><strong>تكلفة البضاعة:</strong> يتم حساب تكلفة كل منتج مباع للعميل باستخدام متوسط سعر الشراء (حتى تاريخ البيع) × الكمية المباعة، ثم جمع جميع التكاليف</li>
+                                <li><strong>الربح:</strong> إجمالي المبيعات - تكلفة البضاعة</li>
+                                <li><strong>نسبة الربح:</strong> (الربح ÷ إجمالي المبيعات) × 100</li>
+                            </ol>
+                            <p class="example-note">
+                                <strong>مثال توضيحي:</strong>
+                                <br><br>
+                                <strong>السيناريو:</strong> العميل (أحمد) اشترى منتجات منك:
+                                <br><br>
+                                <strong>الفاتورة الأولى:</strong>
+                                <br>• المنتج: بانية (10 وحدات صغرى)
+                                <br>• سعر البيع: 10 ج.م لكل وحدة صغرى
+                                <br>• إجمالي المبيعات = 10 × 10 = <strong>100 ج.م</strong>
+                                <br>• متوسط سعر الشراء (حتى تاريخ البيع): 7 ج.م لكل وحدة صغرى
+                                <br>• تكلفة البضاعة = 10 × 7 = <strong>70 ج.م</strong>
+                                <br><br>
+                                <strong>الفاتورة الثانية:</strong>
+                                <br>• المنتج: بانية (20 وحدة صغرى)
+                                <br>• سعر البيع: 12 ج.م لكل وحدة صغرى
+                                <br>• إجمالي المبيعات = 20 × 12 = <strong>240 ج.م</strong>
+                                <br>• متوسط سعر الشراء (حتى تاريخ البيع): 8 ج.م لكل وحدة صغرى
+                                <br>• تكلفة البضاعة = 20 × 8 = <strong>160 ج.م</strong>
+                                <br><br>
+                                <strong>الحساب النهائي:</strong>
+                                <br>• إجمالي المبيعات = 100 + 240 = <strong>340 ج.م</strong>
+                                <br>• إجمالي تكلفة البضاعة = 70 + 160 = <strong>230 ج.م</strong>
+                                <br>• الربح = 340 - 230 = <strong>110 ج.م</strong>
+                                <br>• نسبة الربح = (110 ÷ 340) × 100 = <strong>32.4%</strong>
+                                <br><br>
+                                <strong>ماذا يعني الربح 110 ج.م؟</strong>
+                                <br>هذا يعني: <strong>من العميل (أحمد)، ربحت 110 ج.م</strong> بعد خصم تكلفة البضاعة المباعة له
+                                <br><br>
+                                <strong>⚠️ ملاحظة مهمة جداً:</strong>
+                                <br>• <strong>إجمالي المبيعات = ما دفعه العميل لك</strong>
+                                <br>• <strong>تكلفة البضاعة = ما دفعته أنت للمورد عند الشراء</strong>
+                                <br>• <strong>الربح = الفرق بين ما دفعه العميل وما دفعته للمورد</strong>
+                                <br>• إذا كان الربح موجب = <strong>ربح</strong> (كسبت من العميل)
+                                <br>• إذا كان الربح سالب = <strong>خسارة</strong> (خسرت من العميل)
+                                <br><br>
+                                <strong>مثال عملي للربح:</strong>
+                                <br>• العميل دفع: 340 ج.م
+                                <br>• تكلفة البضاعة: 230 ج.م
+                                <br>• الربح = 340 - 230 = <strong>110 ج.م</strong> (كسبت 110 ج.م من هذا العميل)
+                                <br>• نسبة الربح = (110 ÷ 340) × 100 = <strong>32.4%</strong>
+                                <br><br>
+                                <strong>مثال للخسارة:</strong>
+                                <br>• العميل دفع: 200 ج.م
+                                <br>• تكلفة البضاعة: 250 ج.م
+                                <br>• الربح = 200 - 250 = <strong>-50 ج.م</strong> (خسرت 50 ج.م من هذا العميل)
+                                <br>• نسبة الخسارة = (50 ÷ 200) × 100 = <strong>25%</strong>
+                                <br><br>
+                                <strong>توضيح أكثر:</strong>
+                                <br>• يتم حساب تكلفة البضاعة باستخدام <strong>متوسط سعر الشراء حتى تاريخ البيع</strong>
+                                <br>• هذا يعني: إذا اشتريت منتج بسعر 7 ج.م، ثم اشتريته مرة أخرى بسعر 8 ج.م
+                                <br>• عند بيع المنتج للعميل، يتم استخدام المتوسط (7.5 ج.م) لحساب التكلفة
+                                <br>• هذا يضمن حساب دقيق للربح بناءً على التكلفة الفعلية وقت البيع
+                                <br><br>
+                                <strong>الخلاصة:</strong>
+                                <br>• <strong>الربح من العميل = إجمالي المبيعات - تكلفة البضاعة</strong>
+                                <br>• لتحقيق ربح: يجب أن يكون سعر البيع أعلى من تكلفة الشراء
+                                <br>• إذا كان سعر البيع أقل من تكلفة الشراء = خسارة
+                                <br>• هذا الجدول يساعدك في معرفة أي العملاء أكثر ربحية وأيهم يسبب خسارة
+                            </p>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="profit-table">
+                            <thead>
+                                <tr>
+                                    <th>العميل</th>
+                                    <th>إجمالي المبيعات</th>
+                                    <th>تكلفة البضاعة</th>
+                                    <th>الربح</th>
+                                    <th>نسبة الربح</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersProfitTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-state">يرجى تطبيق الفلاتر لعرض البيانات</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Suppliers Profit Tab -->
+                <div class="tab-panel" id="suppliers-profit-tab">
+                    <div class="tab-description">
+                        <p>🏢 <strong>ربح الموردين:</strong> يعرض هذا الجدول معلومات المشتريات من كل مورد. يمكنك رؤية إجمالي المشتريات من كل مورد، تكلفة البضاعة، متوسط السعر، وحالة المورد (سعر مناسب / متوسط / سعر مرتفع). يساعدك على تقييم جودة الموردين من حيث الأسعار. 
+                        <span class="info-trigger" title="اضغط لعرض التوضيح">ℹ️</span>
+                        </p>
+                        <div class="calculation-explanation hover-explanation">
+                            <h4>📊 كيفية حساب متوسط السعر:</h4>
+                            <ol>
+                                <li><strong>إجمالي المشتريات:</strong> مجموع قيمة جميع فواتير الشراء من المورد في الفترة المحددة</li>
+                                <li><strong>تكلفة البضاعة:</strong> نفس قيمة إجمالي المشتريات (إجمالي تكلفة الشراء من المورد)</li>
+                                <li><strong>متوسط السعر:</strong> يتم حسابه بشكل صحيح مع مراعاة الوحدات المختلفة ومعامل التحويل:
+                                    <ul style="margin-top: 8px; margin-bottom: 8px;">
+                                        <li>يتم تحويل جميع الكميات إلى الوحدة الصغرى (smallest unit) باستخدام معامل التحويل</li>
+                                        <li>إذا كانت الوحدة "largest"، يتم ضرب الكمية في معامل التحويل</li>
+                                        <li>إذا كانت الوحدة "smallest"، يتم استخدام الكمية كما هي</li>
+                                        <li>متوسط السعر = إجمالي التكلفة ÷ إجمالي الكمية (بالوحدة الصغرى)</li>
+                                    </ul>
+                                </li>
+                                <li><strong>الحالة:</strong> 
+                                    <ul style="margin-top: 8px; margin-bottom: 8px;">
+                                        <li><strong>سعر مناسب:</strong> متوسط السعر ≤ 100 ج.م</li>
+                                        <li><strong>متوسط:</strong> متوسط السعر بين 100 و 500 ج.م</li>
+                                        <li><strong>سعر مرتفع:</strong> متوسط السعر > 500 ج.م</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            <p class="example-note">
+                                <strong>مثال توضيحي:</strong>
+                                <br><br>
+                                <strong>السيناريو:</strong> اشتريت من المورد (أحمد) منتج معين:
+                                <br><br>
+                                <strong>الشراء الأول:</strong>
+                                <br>• الكمية: 10 وحدات كبيرة (largest)
+                                <br>• السعر: 50 ج.م لكل وحدة كبيرة
+                                <br>• معامل التحويل: 12 (يعني كل وحدة كبيرة = 12 وحدة صغرى)
+                                <br>• التكلفة = 10 × 50 = <strong>500 ج.م</strong>
+                                <br>• الكمية بالوحدة الصغرى = 10 × 12 = <strong>120 وحدة صغرى</strong>
+                                <br><br>
+                                <strong>الشراء الثاني:</strong>
+                                <br>• الكمية: 50 وحدة صغرى (smallest)
+                                <br>• السعر: 5 ج.م لكل وحدة صغرى
+                                <br>• التكلفة = 50 × 5 = <strong>250 ج.م</strong>
+                                <br>• الكمية بالوحدة الصغرى = 50 (كما هي لأنها صغرى) = <strong>50 وحدة صغرى</strong>
+                                <br><br>
+                                <strong>الحساب النهائي:</strong>
+                                <br>• إجمالي التكلفة = 500 + 250 = <strong>750 ج.م</strong>
+                                <br>• إجمالي الكمية (بالوحدة الصغرى) = 120 + 50 = <strong>170 وحدة صغرى</strong>
+                                <br>• متوسط السعر = 750 ÷ 170 = <strong>4.41 ج.م لكل وحدة صغرى</strong>
+                                <br><br>
+                                <strong>ماذا يعني 4.41 ج.م؟</strong>
+                                <br>هذا الرقم يعني: <strong>في المتوسط، كل وحدة صغرى واحدة من هذا المنتج كلفتك 4.41 ج.م</strong> عند الشراء من المورد (أحمد)
+                                <br><br>
+                                <strong>⚠️ ملاحظة مهمة جداً:</strong>
+                                <br>• <strong>4.41 ج.م = تكلفة الشراء</strong> (ما دفعته للمورد)
+                                <br>• إذا بعت المنتج بنفس السعر (4.41 ج.م) = <strong>خسارة</strong> (لن تربح شيء)
+                                <br>• يجب أن تبيع بسعر أعلى من 4.41 ج.م لتحقيق ربح
+                                <br><br>
+                                <strong>مثال عملي للربح:</strong>
+                                <br>• تكلفة الشراء: 4.41 ج.م للوحدة الصغرى
+                                <br>• إذا بعت بسعر 6 ج.م للوحدة الصغرى:
+                                <br>  → الربح = 6 - 4.41 = <strong>1.59 ج.م لكل وحدة</strong>
+                                <br>  → نسبة الربح = (1.59 ÷ 6) × 100 = <strong>26.5%</strong>
+                                <br><br>
+                                <strong>مثال للخسارة:</strong>
+                                <br>• تكلفة الشراء: 4.41 ج.م للوحدة الصغرى
+                                <br>• إذا بعت بسعر 4 ج.م للوحدة الصغرى:
+                                <br>  → الخسارة = 4.41 - 4 = <strong>0.41 ج.م لكل وحدة</strong>
+                                <br>  → نسبة الخسارة = (0.41 ÷ 4.41) × 100 = <strong>9.3%</strong>
+                                <br><br>
+                                <strong>توضيح أكثر:</strong>
+                                <br>• اشتريت 170 وحدة صغرى (بعد تحويل الوحدات الكبيرة) بإجمالي 750 ج.م
+                                <br>• إذا قسمت إجمالي التكلفة (750 ج.م) على إجمالي الكمية (170 وحدة)
+                                <br>• النتيجة: <strong>4.41 ج.م لكل وحدة صغرى</strong> (هذه هي تكلفة الشراء)
+                                <br><br>
+                                <strong>الخلاصة:</strong>
+                                <br>• <strong>متوسط السعر = تكلفة الشراء</strong> (ما دفعته للمورد)
+                                <br>• لتحقيق ربح: يجب أن تبيع بسعر أعلى من متوسط السعر
+                                <br>• إذا بعت بسعر أقل من متوسط السعر = خسارة
+                                <br>• هذا المتوسط يساعدك في معرفة الحد الأدنى للسعر الذي يجب أن تبيع به لتحقيق ربح
+                            </p>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="profit-table">
+                            <thead>
+                                <tr>
+                                    <th>المورد</th>
+                                    <th>إجمالي المشتريات</th>
+                                    <th>تكلفة البضاعة</th>
+                                    <th>متوسط السعر</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliersProfitTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty-state">يرجى تطبيق الفلاتر لعرض البيانات</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Alerts Tab -->
+                <div class="tab-panel" id="alerts-tab">
+                    <div class="tab-description">
+                        <p>⚠️ <strong>التنبيهات:</strong> يعرض هذا القسم تنبيهات مهمة عن المنتجات التي تحتاج إلى انتباه. يشمل منتجات مبيعاتها عالية لكن ربحها ضعيف (مبيعات أكثر من 1000 ج.م ونسبة ربح أقل من 10%)، ومنتجات خسارة (تباع بسعر أقل من تكلفة الشراء).</p>
+                    </div>
+                    <div class="alerts-container">
+                        <div id="highSalesLowProfit" class="alert-section">
+                            <h3>⚠️ منتجات مبيعاتها عالية لكن ربحها ضعيف</h3>
+                            <div id="highSalesLowProfitList" class="alert-list"></div>
+                        </div>
+                        <div id="lossProducts" class="alert-section">
+                            <h3>🔴 منتجات خسارة</h3>
+                            <div id="lossProductsList" class="alert-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/header.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/reports.js"></script>
+    <script src="scripts/reports-info-trigger.js"></script>
+</body>
+</html>
