@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>إدارة المستخدمين والصلاحيات - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/customers.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .users-table th,
+        .users-table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .users-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+        .users-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .user-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .user-type-badge.admin {
+            background-color: #dc3545;
+            color: white;
+        }
+        .user-type-badge.manager {
+            background-color: #fd7e14;
+            color: white;
+        }
+        .user-type-badge.accountant {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .user-type-badge.sales {
+            background-color: #198754;
+            color: white;
+        }
+        .user-type-badge.warehouse {
+            background-color: #6c757d;
+            color: white;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-badge.active {
+            background-color: #198754;
+            color: white;
+        }
+        .status-badge.inactive {
+            background-color: #dc3545;
+            color: white;
+        }
+        .permissions-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .permission-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .permission-item label {
+            cursor: pointer;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html" class="active"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" id="logoutBtn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1>إدارة المستخدمين والصلاحيات</h1>
+            <button class="btn btn-primary" id="addUserBtn" style="display:none;">
+                <span>+</span> إضافة مستخدم جديد
+            </button>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="بحث في المستخدمين...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filter-group">
+                <select id="typeFilter">
+                    <option value="">جميع الأنواع</option>
+                    <option value="system_engineer" disabled>مهندس النظام</option>
+                    <option value="manager">مدير</option>
+                    <option value="accountant">محاسب</option>
+                    <option value="sales">مندوب مبيعات</option>
+                    <option value="warehouse">مخزن</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select id="statusFilter">
+                    <option value="">جميع الحالات</option>
+                    <option value="active">نشط</option>
+                    <option value="inactive">غير نشط</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>اسم المستخدم</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>نوع المستخدم</th>
+                        <th>الحالة</th>
+                        <th>آخر تسجيل دخول</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be loaded here -->
+                </tbody>
+            </table>
+            <div class="empty-state hidden" id="usersEmptyState">
+                <p>لا يوجد مستخدمين</p>
+                <button class="btn btn-primary" id="emptyStateAddUserBtn">
+                    إضافة مستخدم جديد
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 id="userModalTitle">إضافة مستخدم جديد</h2>
+                <button class="modal-close" id="closeUserModal">&times;</button>
+            </div>
+            <form id="userForm" class="customer-form">
+                <input type="hidden" id="userId" name="userId">
+                <input type="hidden" id="isEditUser" name="isEditUser" value="false">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userName">اسم المستخدم <span class="required">*</span></label>
+                        <input type="text" id="userName" name="userName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">البريد الإلكتروني</label>
+                        <input type="email" id="userEmail" name="userEmail">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userPassword" id="passwordLabel">كلمة المرور <span class="required">*</span></label>
+                        <input type="password" id="userPassword" name="userPassword">
+                        <small id="passwordHint">اتركه فارغاً إذا كنت لا تريد تغيير كلمة المرور</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="userType">نوع المستخدم <span class="required">*</span></label>
+                        <select id="userType" name="userType" required>
+                            <option value="system_engineer" disabled>مهندس النظام</option>
+                            <option value="manager">مدير</option>
+                            <option value="accountant">محاسب</option>
+                            <option value="sales">مندوب مبيعات</option>
+                            <option value="warehouse">مخزن</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userStatus">الحالة <span class="required">*</span></label>
+                        <select id="userStatus" name="userStatus" required>
+                            <option value="active">نشط</option>
+                            <option value="inactive">غير نشط</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="permissions-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0;">الصلاحيات - الشاشات المتاحة</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" id="selectAllPermissions" class="btn btn-secondary" style="padding: 6px 16px; font-size: 14px;">
+                                تحديد الكل
+                            </button>
+                            <button type="button" id="deselectAllPermissions" class="btn btn-secondary" style="padding: 6px 16px; font-size: 14px;">
+                                إلغاء تحديد الكل
+                            </button>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+                        حدد الشاشات التي يمكن للمستخدم الوصول إليها. الشاشات غير المحددة لن تظهر في القائمة الجانبية.
+                    </p>
+                    <div class="permissions-grid">
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_products" value="products">
+                            <label for="perm_products">📦 المنتجات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_customers" value="customers">
+                            <label for="perm_customers">👥 العملاء</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_suppliers" value="suppliers">
+                            <label for="perm_suppliers">🏢 الموردين</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_sales" value="sales">
+                            <label for="perm_sales">💰 المبيعات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_delivery_notes" value="delivery-notes">
+                            <label for="perm_delivery_notes">📋 أذون الصرف</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_settlements" value="settlements">
+                            <label for="perm_settlements">✅ التسويات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_receipts" value="receipts">
+                            <label for="perm_receipts">💵 سندات القبض</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_payments" value="payments">
+                            <label for="perm_payments">💸 سندات الصرف</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_purchases" value="purchases">
+                            <label for="perm_purchases">🛒 المشتريات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_inventory" value="inventory">
+                            <label for="perm_inventory">📝 الجرد</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_assets" value="assets">
+                            <label for="perm_assets">🏛️ أصول الشركة</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_reports" value="reports">
+                            <label for="perm_reports">📊 حساب الأرباح</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_expenses" value="expenses">
+                            <label for="perm_expenses">💼 المصاريف التشغيلية</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_backup" value="backup">
+                            <label for="perm_backup">💾 النسخ الاحتياطي</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_users" value="users">
+                            <label for="perm_users">👤 إدارة المستخدمين والصلاحيات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_settings" value="settings">
+                            <label for="perm_settings">⚙️ الإعدادات</label>
+                        </div>
+                        <div class="permission-item">
+                            <input type="checkbox" name="permissions" id="perm_action_logs" value="action_logs">
+                            <label for="perm_action_logs">📋 سجل الحركات</label>
+                        </div>
+                    </div>
+                    <small style="display: block; margin-top: 12px; color: #666;">
+                        <strong>ملاحظة:</strong> عند تحديد جميع الصلاحيات، سيحصل المستخدم على صلاحيات كاملة (*). الشاشات غير المحددة لن يتمكن من الوصول إليها.
+                    </small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelUserBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/header.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/users.js"></script>
+</body>
+</html>
+

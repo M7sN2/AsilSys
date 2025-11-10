@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-hashes'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
     <title>سجل الحركات - نظام أسيل</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/customers.css">
     <link rel="stylesheet" href="styles/topbar.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -122,12 +118,121 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
+        .filter-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%238b4513' d='M8 11L3 6h10z'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            padding-left: 44px;
+            padding-right: 16px;
+            font-weight: 600;
+            min-height: 48px;
+        }
+        
+        .filter-group select:hover {
+            border-color: rgba(139, 69, 19, 0.4);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%238b4513' d='M8 11L3 6h10z'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(254, 243, 199, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+            transform: translateY(-1px);
+        }
+        
         .filter-group select:focus,
         .filter-group input:focus {
             outline: none;
             border-color: #8b4513;
-            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.1);
+            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.15), 0 4px 12px rgba(139, 69, 19, 0.2);
             transform: translateY(-2px);
+        }
+        
+        .filter-group select:focus {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%238b4513' d='M8 11L3 6h10z'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(254, 243, 199, 0.4) 100%);
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+        }
+        
+        .filter-group select option {
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e293b;
+            background: #ffffff;
+        }
+        
+        .filter-group select option:hover {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.5) 0%, rgba(254, 243, 199, 0.3) 100%);
+        }
+        
+        .filter-group select option:checked {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(139, 69, 19, 0.05) 100%);
+            color: #8b4513;
+            font-weight: 700;
+        }
+        
+        /* Special styling for main select dropdowns */
+        #customerSelect,
+        #supplierSelect,
+        #productSelect {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            font-size: 15px;
+            font-weight: 600;
+            min-height: 52px;
+        }
+        
+        #customerSelect:hover,
+        #supplierSelect:hover,
+        #productSelect:hover {
+            border-color: rgba(139, 69, 19, 0.4);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%238b4513' d='M8 11L3 6h10z'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(254, 243, 199, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+        }
+        
+        #customerSelect:focus,
+        #supplierSelect:focus,
+        #productSelect:focus {
+            border-color: #8b4513;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%238b4513' d='M8 11L3 6h10z'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(254, 243, 199, 0.4) 100%);
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.15), 0 8px 20px rgba(139, 69, 19, 0.2);
+        }
+        
+        /* Label styling with icons */
+        label[for="customerSelect"]::before {
+            content: '👥';
+            margin-left: 8px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        label[for="supplierSelect"]::before {
+            content: '🏢';
+            margin-left: 8px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        label[for="productSelect"]::before {
+            content: '📦';
+            margin-left: 8px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        .filter-group label[for="customerSelect"],
+        .filter-group label[for="supplierSelect"],
+        .filter-group label[for="productSelect"] {
+            font-weight: 700;
+            font-size: 15px;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
         }
         
         /* ===================================
@@ -522,9 +627,10 @@
         <ul class="sidebar-menu">
             <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
             <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
-            <li><a href="customers.html"><span class="icon">👥</span> العملاء</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
             <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
             <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
             <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
             <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
             <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
@@ -561,9 +667,8 @@
             <div class="tabs">
                 <button class="tab-btn active" data-tab="customer-statement">كشف حساب عميل</button>
                 <button class="tab-btn" data-tab="supplier-statement">كشف حساب مورد</button>
-                <button class="tab-btn" data-tab="inventory-movement">حركة مخزون</button>
                 <button class="tab-btn" data-tab="product-movement">حركة منتج معين</button>
-                <button class="tab-btn" data-tab="delivery-notes-settlements">أذون الصرف والتسويات</button>
+                <button class="tab-btn" data-tab="delivery-notes-settlements">أذون الصرف</button>
                 <button class="tab-btn" data-tab="operating-expenses">المصاريف التشغيلية</button>
             </div>
         </div>
@@ -601,16 +706,19 @@
                             <th>كود الحركة</th>
                             <th>رقم المرجع</th>
                             <th>التاريخ</th>
+                            <th>التوقيت</th>
+                            <th>وقت الإضافة في النظام</th>
                             <th>نوع الحركة</th>
                             <th>إجمالي الحركة</th>
                             <th>الرصيد قبل الحركة</th>
                             <th>المدفوع أثناء الحركة</th>
                             <th>الرصيد الجديد</th>
+                            <th>ملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="customerStatementBody">
                         <tr>
-                            <td colspan="8" class="empty-state">اختر العميل وحدد التاريخ ثم اضغط تحميل الكشف</td>
+                            <td colspan="11" class="empty-state">اختر العميل وحدد التاريخ ثم اضغط تحميل الكشف</td>
                         </tr>
                     </tbody>
                 </table>
@@ -650,78 +758,26 @@
                             <th>كود الحركة</th>
                             <th>رقم المرجع</th>
                             <th>التاريخ</th>
+                            <th>التوقيت</th>
+                            <th>وقت الإضافة في النظام</th>
                             <th>نوع الحركة</th>
                             <th>إجمالي الحركة</th>
                             <th>الرصيد قبل الحركة</th>
                             <th>المدفوع أثناء الحركة</th>
                             <th>الرصيد الجديد</th>
+                            <th>ملاحظات</th>
                         </tr>
                     </thead>
                     <tbody id="supplierStatementBody">
                         <tr>
-                            <td colspan="8" class="empty-state">اختر المورد وحدد التاريخ ثم اضغط تحميل الكشف</td>
+                            <td colspan="11" class="empty-state">اختر المورد وحدد التاريخ ثم اضغط تحميل الكشف</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Tab 3: Inventory Movement -->
-        <div class="tab-content" id="inventory-movement-tab">
-            <div class="filters-section">
-                <div class="filter-group">
-                    <label for="inventoryDateFrom">من تاريخ</label>
-                    <input type="date" id="inventoryDateFrom">
-                </div>
-                <div class="filter-group">
-                    <label for="inventoryDateTo">إلى تاريخ</label>
-                    <input type="date" id="inventoryDateTo">
-                </div>
-                <div class="filter-group">
-                    <label for="inventoryMovementType">نوع الحركة</label>
-                    <select id="inventoryMovementType">
-                        <option value="">جميع الأنواع</option>
-                        <option value="purchase">مشتريات</option>
-                        <option value="sale">مبيعات</option>
-                        <option value="adjustment">جرد</option>
-                        <option value="return">مرتجع</option>
-                        <option value="delivery-note">إذن صرف</option>
-                        <option value="settlement">تسوية</option>
-                    </select>
-                </div>
-                <div class="filter-group" style="align-self: flex-end;">
-                    <button class="btn btn-primary" id="loadInventoryMovementBtn">تحميل الحركات</button>
-                </div>
-            </div>
-            <div class="report-actions">
-                <button class="btn btn-secondary" id="saveInventoryMovementBtn">💾 حفظ</button>
-                <button class="btn btn-secondary" id="printInventoryMovementBtn">🖨️ طباعة</button>
-            </div>
-            <div class="table-container">
-                <table class="statement-table">
-                    <thead>
-                        <tr>
-                            <th>التاريخ</th>
-                            <th>نوع الحركة</th>
-                            <th>رقم المرجع</th>
-                            <th>اسم المنتج</th>
-                            <th>الوحدة</th>
-                            <th>الكمية قبل الحركة</th>
-                            <th>كمية الحركة</th>
-                            <th>الكمية بعد الحركة</th>
-                            <th>المستخدم</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventoryMovementBody">
-                        <tr>
-                            <td colspan="9" class="empty-state">حدد التاريخ واختر نوع الحركة ثم اضغط تحميل الحركات</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Tab 4: Product Movement -->
+        <!-- Tab 3: Product Movement -->
         <div class="tab-content" id="product-movement-tab">
             <div class="filters-section">
                 <div class="filter-group">
@@ -751,6 +807,8 @@
                     <thead>
                         <tr>
                             <th>التاريخ</th>
+                            <th>التوقيت</th>
+                            <th>وقت الإضافة في النظام</th>
                             <th>نوع الحركة</th>
                             <th>رقم المرجع</th>
                             <th>اسم المنتج</th>
@@ -766,14 +824,14 @@
                     </thead>
                     <tbody id="productMovementBody">
                         <tr>
-                            <td colspan="12" class="empty-state">اختر المنتج وحدد التاريخ ثم اضغط تحميل الحركات</td>
+                            <td colspan="14" class="empty-state">اختر المنتج وحدد التاريخ ثم اضغط تحميل الحركات</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Tab 5: Delivery Notes and Settlements -->
+        <!-- Tab 4: Delivery Notes -->
         <div class="tab-content" id="delivery-notes-settlements-tab">
             <div class="filters-section">
                 <div class="filter-group">
@@ -783,14 +841,6 @@
                 <div class="filter-group">
                     <label for="dnDateTo">إلى تاريخ</label>
                     <input type="date" id="dnDateTo">
-                </div>
-                <div class="filter-group">
-                    <label for="dnStatusFilter">الحالة</label>
-                    <select id="dnStatusFilter">
-                        <option value="">جميع الحالات</option>
-                        <option value="issued">صادر</option>
-                        <option value="settled">تم التسوية</option>
-                    </select>
                 </div>
                 <div class="filter-group" style="align-self: flex-end;">
                     <button class="btn btn-primary" id="loadDeliveryNotesSettlementsBtn">تحميل البيانات</button>
@@ -805,29 +855,24 @@
                     <thead>
                         <tr>
                             <th>التاريخ</th>
+                            <th>وقت الإضافة في النظام</th>
                             <th>رقم إذن الصرف</th>
                             <th>أمين المخزن / التلاجة</th>
-                            <th>رقم التسوية</th>
-                            <th>المندوب</th>
                             <th>المنتج</th>
-                            <th>المصروف</th>
-                            <th>المباع</th>
-                            <th>المرتجع</th>
-                            <th>المرفوض</th>
-                            <th>الفرق</th>
-                            <th>الحالة</th>
+                            <th>الكمية المصروفة</th>
+                            <th>الوحدة</th>
                         </tr>
                     </thead>
                     <tbody id="deliveryNotesSettlementsBody">
                         <tr>
-                            <td colspan="12" class="empty-state">حدد التاريخ واختر الحالة ثم اضغط تحميل البيانات</td>
+                            <td colspan="7" class="empty-state">حدد التاريخ ثم اضغط تحميل البيانات</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Tab 6: Operating Expenses -->
+        <!-- Tab 5: Operating Expenses -->
         <div class="tab-content" id="operating-expenses-tab">
             <div class="filters-section">
                 <div class="filter-group">
@@ -846,6 +891,12 @@
                         <option value="operational">مصاريف تشغيل</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label for="expensesRecipientFilter">المستلم</label>
+                    <select id="expensesRecipientFilter">
+                        <option value="">جميع المستلمين</option>
+                    </select>
+                </div>
                 <div class="filter-group" style="align-self: flex-end;">
                     <button class="btn btn-primary" id="loadOperatingExpensesBtn">تحميل البيانات</button>
                 </div>
@@ -859,6 +910,8 @@
                     <thead>
                         <tr>
                             <th>التاريخ</th>
+                            <th>التوقيت</th>
+                            <th>وقت الإضافة في النظام</th>
                             <th>رقم المصروف</th>
                             <th>نوع المصروف</th>
                             <th>المبلغ</th>
@@ -869,7 +922,7 @@
                     </thead>
                     <tbody id="operatingExpensesBody">
                         <tr>
-                            <td colspan="7" class="empty-state">حدد التاريخ واختر نوع المصروف ثم اضغط تحميل البيانات</td>
+                            <td colspan="9" class="empty-state">حدد التاريخ واختر نوع المصروف ثم اضغط تحميل البيانات</td>
                         </tr>
                     </tbody>
                 </table>
@@ -880,6 +933,12 @@
         <div class="pagination-container" id="paginationContainer" style="display: none;">
             <div class="pagination-info">
                 <span id="paginationInfo">عرض 0 - 0 من 0</span>
+                <select id="itemsPerPageSelect" class="items-per-page-select">
+                    <option value="20">20 في الصفحة</option>
+                    <option value="50">50 في الصفحة</option>
+                    <option value="100">100 في الصفحة</option>
+                    <option value="all">عرض الكل</option>
+                </select>
             </div>
             <div class="pagination-controls">
                 <button type="button" id="prevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
