@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-hashes'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self';">
+    <title>النسخ الاحتياطي - نظام أسيل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/customers.css">
+    <link rel="stylesheet" href="styles/backup.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء</a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="settlements.html"><span class="icon">✅</span> التسويات</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html" class="active"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1>النسخ الاحتياطي</h1>
+        </div>
+
+        <!-- Backup Actions -->
+        <div class="backup-actions">
+            <div class="action-card">
+                <div class="action-icon">📥</div>
+                <h3>إنشاء نسخة احتياطية</h3>
+                <p>إنشاء نسخة احتياطية كاملة من قاعدة البيانات</p>
+                <button class="btn btn-primary" id="createBackupBtn">
+                    <span>+</span> إنشاء نسخة احتياطية
+                </button>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">📤</div>
+                <h3>استعادة نسخة احتياطية</h3>
+                <p>استعادة قاعدة البيانات من نسخة احتياطية محفوظة</p>
+                <button class="btn btn-secondary" id="restoreBackupBtn">
+                    <span>↻</span> استعادة نسخة احتياطية
+                </button>
+            </div>
+        </div>
+
+        <!-- Backup History -->
+        <div class="backup-history-section">
+            <h2>تاريخ النسخ الاحتياطي</h2>
+            <div class="table-container">
+                <table class="backup-history-table">
+                    <thead>
+                        <tr>
+                            <th>التاريخ</th>
+                            <th>المسار</th>
+                            <th>النوع</th>
+                            <th>الحجم</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="backupHistoryBody">
+                        <tr>
+                            <td colspan="5" class="text-center">جارٍ التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="empty-state hidden" id="emptyState">
+                <p>لا توجد نسخ احتياطية</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container" id="paginationContainer">
+            <div class="pagination-info">
+                <span id="paginationInfo">عرض 0 - 0 من 0</span>
+            </div>
+            <div class="pagination-controls">
+                <button type="button" id="prevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
+                <span class="page-numbers" id="pageNumbers"></span>
+                <button type="button" id="nextPageBtn" class="btn btn-secondary" disabled>التالي →</button>
+            </div>
+        </div>
+
+        <!-- Auto Backup Settings -->
+        <div class="auto-backup-section">
+            <h2>إعدادات النسخ الاحتياطي التلقائي</h2>
+            <div class="settings-card">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="autoBackupEnabled">
+                        تفعيل النسخ الاحتياطي التلقائي
+                    </label>
+                </div>
+                <div class="form-group" id="autoBackupPathGroup" style="display: none;">
+                    <label for="backupPath">مسار الحفظ:</label>
+                    <div class="input-group">
+                        <input type="text" id="backupPath" readonly placeholder="اختر مجلد حفظ النسخ الاحتياطية">
+                        <button class="btn btn-secondary" id="selectBackupPathBtn">اختر المجلد</button>
+                    </div>
+                    <small style="display: block; margin-top: 8px; color: #666;">
+                        سيتم حفظ النسخ الاحتياطية التلقائية في هذا المجلد
+                    </small>
+                </div>
+                <div class="form-group" id="autoBackupIntervalGroup" style="display: none;">
+                    <label for="backupInterval">فترة النسخ الاحتياطي:</label>
+                    <select id="backupInterval" class="form-control">
+                        <option value="daily">يومي (كل يوم)</option>
+                        <option value="weekly">أسبوعي (كل أسبوع)</option>
+                        <option value="monthly">شهري (كل شهر)</option>
+                    </select>
+                    <small style="display: block; margin-top: 8px; color: #666;">
+                        سيتم إنشاء نسخة احتياطية تلقائياً حسب الفترة المحددة عند إغلاق البرنامج
+                    </small>
+                </div>
+                <button class="btn btn-primary" id="saveAutoBackupBtn">حفظ الإعدادات</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="scripts/header.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/backup.js"></script>
+</body>
+</html>
+

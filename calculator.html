@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-hashes'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self';">
+    <title>آلة حاسبة - شركة أسيل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء</a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> الجرد</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <div>
+                <h1>آلة حاسبة</h1>
+                <p class="welcome-text">حاسبة احترافية للحسابات اليومية</p>
+            </div>
+        </div>
+
+        <!-- Calculator -->
+        <div class="calculator-fullscreen">
+            <div class="calculator-container">
+                <div class="calculator">
+                    <div class="calculator-display">
+                        <div class="calculator-history" id="calcHistory"></div>
+                        <div class="calculator-screen" id="calcScreen">0</div>
+                    </div>
+                    <div class="calculator-buttons">
+                        <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
+                        <button class="calc-btn calc-btn-clear" data-action="clearEntry">CE</button>
+                        <button class="calc-btn calc-btn-operator" data-action="delete">⌫</button>
+                        <button class="calc-btn calc-btn-operator" data-action="divide">÷</button>
+                        
+                        <button class="calc-btn calc-btn-number" data-value="7">7</button>
+                        <button class="calc-btn calc-btn-number" data-value="8">8</button>
+                        <button class="calc-btn calc-btn-number" data-value="9">9</button>
+                        <button class="calc-btn calc-btn-operator" data-action="multiply">×</button>
+                        
+                        <button class="calc-btn calc-btn-number" data-value="4">4</button>
+                        <button class="calc-btn calc-btn-number" data-value="5">5</button>
+                        <button class="calc-btn calc-btn-number" data-value="6">6</button>
+                        <button class="calc-btn calc-btn-operator" data-action="subtract">−</button>
+                        
+                        <button class="calc-btn calc-btn-number" data-value="1">1</button>
+                        <button class="calc-btn calc-btn-number" data-value="2">2</button>
+                        <button class="calc-btn calc-btn-number" data-value="3">3</button>
+                        <button class="calc-btn calc-btn-operator" data-action="add">+</button>
+                        
+                        <button class="calc-btn calc-btn-number calc-btn-zero" data-value="0">0</button>
+                        <button class="calc-btn calc-btn-number" data-value=".">.</button>
+                        <button class="calc-btn calc-btn-equals" data-action="equals">=</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- <script src="scripts/permissions.js"></script> -->
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/calculator.js"></script>
+</body>
+</html>
+
