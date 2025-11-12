@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-hashes'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
     <title>أصول الشركة - نظام أسيل</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/assets.css">
     <link rel="stylesheet" href="styles/topbar.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -78,11 +74,10 @@
         <ul class="sidebar-menu">
             <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
             <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
-            <li><a href="customers.html"><span class="icon">👥</span> العملاء</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
             <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
             <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
             <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
-            <li><a href="settlements.html"><span class="icon">✅</span> التسويات</a></li>
             <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
             <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
             <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
