@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-hashes'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
     <title>أذون الصرف - نظام أسيل</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lateef:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/sales.css">
     <link rel="stylesheet" href="styles/topbar.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -78,11 +74,10 @@
         <ul class="sidebar-menu">
             <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
             <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
-            <li><a href="customers.html"><span class="icon">👥</span> العملاء</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
             <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
             <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
             <li><a href="delivery-notes.html" class="active"><span class="icon">📋</span> أذون الصرف</a></li>
-            <li><a href="settlements.html"><span class="icon">✅</span> التسويات</a></li>
             <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
             <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
             <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
@@ -112,70 +107,34 @@
     <main class="main-content">
         <div class="content-header">
             <h1>أذون الصرف</h1>
-            <button class="btn btn-primary" id="newNoteBtn">
-                <span>+</span> إذن صرف جديد
-            </button>
         </div>
 
-        <!-- Search & Filters Section -->
-        <div class="filters-section">
-            <div class="search-group">
-                <input type="text" id="searchInput" class="search-input" placeholder="🔍 البحث برقم إذن الصرف أو اسم أمين المخزن...">
-                <button type="button" id="clearSearchBtn" class="btn-clear" title="مسح البحث">✕</button>
+        <!-- Modern Date Selection and Load Section -->
+        <div class="delivery-note-loader-card">
+            <div class="loader-card-header">
+                <div class="header-icon">📦</div>
+                <div class="header-text">
+                    <h2>تحميل منتجات من فواتير المبيعات</h2>
+                    <p>اختر تاريخ الفواتير لتحميل المنتجات تلقائياً</p>
+                </div>
             </div>
-            <div class="date-filter-group">
-                <label>من تاريخ:</label>
-                <input type="date" id="dateFrom" class="date-input">
-            </div>
-            <div class="date-filter-group">
-                <label>إلى تاريخ:</label>
-                <input type="date" id="dateTo" class="date-input">
-            </div>
-            <div class="status-filter-group">
-                <label>الحالة:</label>
-                <select id="statusFilter" class="status-select">
-                    <option value="">جميع الحالات</option>
-                    <option value="issued">صادر</option>
-                    <option value="settled">تم التسوية</option>
-                </select>
-            </div>
-            <button type="button" id="clearFiltersBtn" class="btn btn-secondary">مسح الفلاتر</button>
-        </div>
-
-        <!-- Notes List -->
-        <div class="table-container">
-            <table class="invoices-table">
-                <thead>
-                    <tr>
-                        <th>رقم إذن الصرف</th>
-                        <th>التاريخ</th>
-                        <th>أمين المخزن / التلاجة</th>
-                        <th>عدد المنتجات</th>
-                        <th>الحالة</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="notesTableBody">
-                    <!-- Notes will be loaded here -->
-                </tbody>
-            </table>
-            <div class="empty-state hidden" id="emptyState">
-                <p>لا توجد أذون صرف</p>
-                <button class="btn btn-primary" id="emptyStateAddBtn">
-                    إنشاء إذن صرف جديد
+            <div class="loader-card-body">
+                <div class="date-input-wrapper">
+                    <label for="selectedDateForLoad" class="date-label">
+                        <span class="label-icon">📅</span>
+                        <span class="label-text">اختر تاريخ الفواتير</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="date-input-container">
+                        <input type="date" id="selectedDateForLoad" class="modern-date-input">
+                        <span class="date-input-icon">📆</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-load-products" id="loadProductsBtn">
+                    <span class="btn-icon">📋</span>
+                    <span class="btn-text">تحميل المنتجات</span>
+                    <span class="btn-arrow">→</span>
                 </button>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="pagination-container hidden" id="paginationContainer">
-            <div class="pagination-info">
-                <span id="paginationInfo">عرض 0 - 0 من 0</span>
-            </div>
-            <div class="pagination-controls">
-                <button type="button" id="prevPageBtn" class="btn btn-secondary" disabled>← السابق</button>
-                <span class="page-numbers" id="pageNumbers"></span>
-                <button type="button" id="nextPageBtn" class="btn btn-secondary" disabled>التالي →</button>
             </div>
         </div>
     </main>
@@ -217,27 +176,43 @@
                 <!-- Products Section -->
                 <div class="form-section">
                     <h3>المنتجات</h3>
-                    <div class="add-product-section">
-                        <div class="product-search-wrapper">
-                            <input type="text" id="productSearch" placeholder="ابحث عن منتج (اسم أو صنف)..." autocomplete="off">
-                            <input type="hidden" id="productSelect" value="">
-                            <div class="product-dropdown" id="productDropdown"></div>
+                    <div class="products-actions-container">
+                        <button type="button" class="btn-load-from-invoices" id="loadFromInvoicesBtn">
+                            <span class="btn-icon-wrapper">
+                                <span class="btn-icon">📋</span>
+                            </span>
+                            <span class="btn-text-content">
+                                <span class="btn-main-text">تحميل المنتجات من فواتير اليوم</span>
+                                <span class="btn-sub-text">تلقائياً</span>
+                            </span>
+                            <span class="btn-arrow-icon">→</span>
+                        </button>
+                        <div class="secondary-actions">
+                            <button type="button" class="btn-action-secondary" id="saveNoteAsPDFBtn" title="حفظ PDF">
+                                <span class="action-icon">💾</span>
+                                <span class="action-text">PDF</span>
+                            </button>
+                            <button type="button" class="btn-action-secondary" id="printNoteBtn" title="طباعة">
+                                <span class="action-icon">🖨️</span>
+                                <span class="action-text">طباعة</span>
+                            </button>
+                            <button type="submit" class="btn-action-secondary btn-action-save" title="حفظ">
+                                <span class="action-icon">✓</span>
+                                <span class="action-text">حفظ</span>
+                            </button>
+                            <button type="button" class="btn-action-secondary btn-action-cancel" id="cancelBtn" title="إلغاء">
+                                <span class="action-icon">✕</span>
+                                <span class="action-text">إلغاء</span>
+                            </button>
                         </div>
-                        <input type="number" id="productQuantity" placeholder="الكمية" min="0.01" step="0.01">
-                        <select id="productUnit">
-                            <option value="smallest">أصغر وحدة</option>
-                            <option value="largest">أكبر وحدة</option>
-                        </select>
-                        <button type="button" class="btn btn-primary" id="addProductBtn">إضافة</button>
                     </div>
                     <div class="products-list">
                         <table class="invoice-products-table">
                             <thead>
                                 <tr>
-                                    <th>اسم المنتج</th>
+                                    <th>المنتج / الصنف</th>
                                     <th>الكمية</th>
                                     <th>الوحدة</th>
-                                    <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody id="noteProductsBody">
@@ -254,12 +229,6 @@
                         <textarea id="notes" name="notes" rows="3" placeholder="أي ملاحظات إضافية..."></textarea>
                     </div>
                 </div>
-
-                <!-- Form Actions -->
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">حفظ</button>
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">إلغاء</button>
-                </div>
             </form>
         </div>
     </div>
@@ -270,7 +239,494 @@
     <script src="scripts/header.js"></script>
     <script src="scripts/sidebar.js"></script>
     <script src="scripts/logout.js"></script>
+    <script src="scripts/user-helper.js"></script>
     <script src="scripts/delivery-notes.js"></script>
+    
+    <style>
+        /* ===================================
+           Modern Delivery Note Loader Card
+           =================================== */
+        
+        .delivery-note-loader-card {
+            max-width: 700px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .delivery-note-loader-card:hover {
+            box-shadow: 
+                0 8px 30px rgba(0, 0, 0, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .loader-card-header {
+            background: linear-gradient(135deg, #8b4513 0%, #cd853f 100%);
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+        }
+        
+        .header-icon {
+            font-size: 32px;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+        
+        .header-text {
+            flex: 1;
+        }
+        
+        .header-text h2 {
+            margin: 0 0 6px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-text p {
+            margin: 0;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+        
+        .loader-card-body {
+            padding: 28px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        .date-input-wrapper {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .date-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .label-icon {
+            font-size: 16px;
+        }
+        
+        .label-text {
+            flex: 1;
+        }
+        
+        .date-label .required {
+            color: #ef4444;
+            font-weight: 700;
+            margin-right: 2px;
+        }
+        
+        .date-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modern-date-input {
+            width: 100%;
+            padding: 14px 45px 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1f2937;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            cursor: pointer;
+        }
+        
+        .modern-date-input:hover {
+            border-color: #cd853f;
+            background: #fefefe;
+        }
+        
+        .modern-date-input:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 
+                0 0 0 4px rgba(139, 69, 19, 0.1),
+                0 4px 12px rgba(139, 69, 19, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .date-input-icon {
+            position: absolute;
+            left: 14px;
+            font-size: 18px;
+            color: #9ca3af;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        .modern-date-input:focus + .date-input-icon {
+            color: #8b4513;
+            transform: scale(1.1);
+        }
+        
+        .btn-load-products {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 4px 14px rgba(220, 38, 38, 0.3),
+                0 2px 4px rgba(220, 38, 38, 0.2);
+            white-space: nowrap;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+        
+        .btn-load-products:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            box-shadow: 
+                0 6px 20px rgba(220, 38, 38, 0.4),
+                0 4px 8px rgba(220, 38, 38, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-load-products:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 2px 8px rgba(220, 38, 38, 0.3),
+                0 1px 2px rgba(220, 38, 38, 0.2);
+        }
+        
+        .btn-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+        
+        .btn-text {
+            font-weight: 700;
+        }
+        
+        .btn-arrow {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-load-products:hover .btn-arrow {
+            transform: translateX(-3px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .delivery-note-loader-card {
+                margin: 20px 15px;
+                border-radius: 16px;
+            }
+            
+            .loader-card-header {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-icon {
+                font-size: 28px;
+            }
+            
+            .header-text h2 {
+                font-size: 18px;
+            }
+            
+            .loader-card-body {
+                padding: 20px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .date-input-wrapper {
+                min-width: 100%;
+            }
+            
+            .btn-load-products {
+                width: 100%;
+                justify-content: center;
+                padding: 16px 24px;
+            }
+        }
+        
+        /* Loading State */
+        .btn-load-products.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .btn-load-products.loading .btn-arrow {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===================================
+           Modern Load Products Button
+           =================================== */
+        
+        .products-actions-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        .btn-load-from-invoices {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #8b4513 0%, #cd853f 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 4px 16px rgba(139, 69, 19, 0.25),
+                0 2px 6px rgba(139, 69, 19, 0.15);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        .btn-load-from-invoices::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-load-from-invoices:hover::before {
+            left: 100%;
+        }
+
+        .btn-load-from-invoices:hover {
+            background: linear-gradient(135deg, #7a3a10 0%, #b87333 100%);
+            box-shadow: 
+                0 6px 24px rgba(139, 69, 19, 0.35),
+                0 4px 10px rgba(139, 69, 19, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-load-from-invoices:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 3px 12px rgba(139, 69, 19, 0.3),
+                0 1px 4px rgba(139, 69, 19, 0.2);
+        }
+
+        .btn-load-from-invoices.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn-load-from-invoices.loading .btn-arrow-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        .btn-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn-load-from-invoices:hover .btn-icon-wrapper {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .btn-icon {
+            font-size: 22px;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .btn-text-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+
+        .btn-main-text {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.3;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-sub-text {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.9;
+            line-height: 1.2;
+        }
+
+        .btn-arrow-icon {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-load-from-invoices:hover .btn-arrow-icon {
+            transform: translateX(-4px);
+        }
+
+        .secondary-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-action-secondary {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 12px 16px;
+            min-width: 70px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        .btn-action-secondary#saveNoteAsPDFBtn {
+            border-color: #17a2b8;
+            color: #17a2b8;
+        }
+
+        .btn-action-secondary#saveNoteAsPDFBtn:hover {
+            background: #17a2b8;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-action-secondary#printNoteBtn {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        .btn-action-secondary#printNoteBtn:hover {
+            background: #28a745;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-action-secondary.btn-action-save {
+            border-color: #8b4513;
+            color: #8b4513;
+        }
+
+        .btn-action-secondary.btn-action-save:hover {
+            background: #8b4513;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+
+        .btn-action-secondary.btn-action-cancel {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-action-secondary.btn-action-cancel:hover {
+            background: #6c757d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .action-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .action-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .products-actions-container {
+                flex-direction: column;
+            }
+
+            .btn-load-from-invoices {
+                min-width: 100%;
+                width: 100%;
+            }
+
+            .secondary-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .btn-action-secondary {
+                flex: 1;
+                flex-direction: row;
+                gap: 8px;
+                padding: 14px 16px;
+            }
+        }
+    </style>
 </body>
 </html>
 
