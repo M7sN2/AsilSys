@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>العرض التسويقي - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/marketing.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html" class="active"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="marketing-container">
+            <!-- Tabs Navigation -->
+            <div class="marketing-tabs">
+                <button class="tab-btn active" data-tab="marketing">العرض التسويقي</button>
+            </div>
+
+            <!-- Marketing Content Tab -->
+            <div class="tab-content active" id="marketing-tab">
+            <!-- Sub-tabs inside marketing tab -->
+            <div class="marketing-sub-tabs">
+                <button class="sub-tab-btn active" data-sub-tab="marketing-content"> مِلَفّ تَعْرِيفِي</button>
+                <button class="sub-tab-btn" data-sub-tab="pricelist">قائمة الأسعار</button>
+            </div>
+
+            <!-- Marketing Content Sub-tab -->
+            <div class="sub-tab-content active" id="marketing-content-subtab">
+            <!-- Company Logo (for print) -->
+            <div class="company-logo" style="display: none;">
+                <img src="assets/aseel_logo.svg" alt="أسيل للتوريدات الغذائية" />
+            </div>
+            <!-- Marketing Actions -->
+            <div class="marketing-actions">
+                <button class="btn btn-primary" id="printMarketingBtn">
+                    <span class="btn-icon">🖨️</span>
+                    <span>طباعة</span>
+                </button>
+                <button class="btn btn-secondary" id="exportMarketingPdfBtn">
+                    <span class="btn-icon">📄</span>
+                    <span>تصدير PDF</span>
+                </button>
+            </div>
+            <!-- Hero Section -->
+            <section class="marketing-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">أسيل للتوريدات الغذائية</h1>
+                    <p class="hero-subtitle">هل تبحث عن مورّد غذائي موثوق؟</p>
+                    <div class="hero-problems">
+                        <p class="problem-text">❌ تأخير في التوصيل؟</p>
+                        <p class="problem-text">❌ منتجات جودتها مش مضمونة؟</p>
+                        <p class="problem-text">❌ أسعار غير مستقرة؟</p>
+                    </div>
+                    <p class="hero-solution">
+                        في <strong>أسيل للتوريدات الغذائية</strong>، نفهم أن نجاح مطعمك يعتمد على شريك يمكنك الاعتماد عليه.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="statistics-section">
+                <h2 class="section-title">إنجازاتنا في أرقام</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">+150</div>
+                        <div class="stat-label">مطعم وكافيه</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">500</div>
+                        <div class="stat-label">متر مربع مخازن</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">-18°</div>
+                        <div class="stat-label">درجة التبريد</div>
+                    </div>
+                    <div class="stat-card" style="display: flex; align-items: center; justify-content: center;">
+                        <div class="stat-label" style="font-size: 1.3rem; font-weight: 600; margin: 0; text-align: center; line-height: 1.4;">التزام بمواعيد التوصيل</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Delivery Section -->
+            <section class="features-section">
+                <h2 class="section-title"></h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🗺️</div>
+                        <h3>جدول توصيل منتظم</h3>
+                        <p>حسب خطوط السير المخطط لها</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚚</div>
+                        <h3>نظام توزيع مخطط</h3>
+                        <p>ومنظم بكفاءة عالية</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">❄️</div>
+                        <h3>سيارات مبردة متخصصة</h3>
+                        <p>لضمان جودة المنتجات</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>تنسيق مسبق للمواعيد</h3>
+                        <p>لضمان وصول الطلبات في الوقت المحدد</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cold Chain Section -->
+            <section class="benefits-section">
+                <h2 class="section-title">❄️ سلسلة تبريد متواصلة</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🏭</div>
+                        <div class="benefit-content">
+                            <h3>مخازن بتبريد -18 درجة</h3>
+                            <p>مخازن مجهزة بأحدث أنظمة التبريد للحفاظ على جودة المنتجات</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🌡️</div>
+                        <div class="benefit-content">
+                            <h3>مراقبة حرارة مستمرة</h3>
+                            <p>نظام مراقبة متقدم لضمان استمرار سلسلة التبريد</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">📦</div>
+                        <div class="benefit-content">
+                            <h3>تغليف احترافي محكم</h3>
+                            <p>تغليف متخصص يحافظ على درجة الحرارة والجودة</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">✅</div>
+                        <div class="benefit-content">
+                            <h3>جودة مضمونة حتى التسليم</h3>
+                            <p>ضمان وصول المنتجات بحالة مثالية</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing Section -->
+            <section class="features-section">
+                <h2 class="section-title">💰 أسعار واضحة ومنافسة</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💵</div>
+                        <h3>تسعير شفاف</h3>
+                        <p>بدون مفاجآت أو تكاليف خفية</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3>خصومات حسب الكمية</h3>
+                        <p>كلما زادت الكمية، زادت الخصومات</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧾</div>
+                        <h3>فواتير مفصلة واضحة</h3>
+                        <p>شفافية كاملة في جميع المعاملات</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3>إمكانية التفاوض</h3>
+                        <p>على العقود والكميات الكبيرة</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section class="products-section">
+                <h2 class="section-title">📦 نوفر جميع احتياجات مطعمك</h2>
+                <p class="products-intro">مش بس منتجات محددة - احنا شريكك في توفير كل ما تحتاجه</p>
+                <div class="products-grid">
+                    <div class="product-category">
+                        <div class="product-icon">🍗</div>
+                        <h3>دجاج مجمد</h3>
+                        <ul class="product-list">
+                            <li>بانيه</li>
+                            <li>ستربس</li>
+                            <li>برجر دجاج</li>
+                            <li>شيش</li>
+                        </ul>
+                    </div>
+                    <div class="product-category">
+                        <div class="product-icon">🥩</div>
+                        <h3>لحوم مجمدة</h3>
+                        <ul class="product-list">
+                            <li>كفتة</li>
+                            <li>شيش طاووق</li>
+                            <li>سوسيس</li>
+                            <li>برجر لحم</li>
+                        </ul>
+                    </div>
+                    <div class="product-category">
+                        <div class="product-icon">🧀</div>
+                        <h3>جبن بأنواعها</h3>
+                        <ul class="product-list">
+                            <li>موتزاريلا</li>
+                            <li>شيدر</li>
+                            <li>جبنة بيضا</li>
+                            <li>جبنة رومي</li>
+                            <li>كريمي</li>
+                        </ul>
+                    </div>
+                    <div class="product-category">
+                        <div class="product-icon">🍅</div>
+                        <h3>صوصات</h3>
+                        <ul class="product-list">
+                            <li>كاتشب</li>
+                            <li>مايونيز</li>
+                            <li>باربيكيو</li>
+                            <li>مسترد</li>
+                            <li>رانش</li>
+                            <li>صوص ثوم</li>
+                        </ul>
+                    </div>
+                    <div class="product-category">
+                        <div class="product-icon">🍟</div>
+                        <h3>بطاطس ومقليات</h3>
+                        <ul class="product-list">
+                            <li>بطاطس</li>
+                            <li>ودجز</li>
+                            <li>حلقات بصل</li>
+                            <li>أصابع موتزاريلا</li>
+                        </ul>
+                    </div>
+                    <div class="product-category">
+                        <div class="product-icon">➕</div>
+                        <h3>وأي احتياجات أخرى</h3>
+                        <p class="product-desc">أي منتجات غذائية أو مستلزمات يحتاجها مطعمك</p>
+                    </div>
+                </div>
+                <p class="quality-note">✅ جميع المنتجات من موردين معتمدين بشهادات جودة وسلامة غذائية</p>
+            </section>
+
+            <!-- Flexible System Section -->
+            <section class="benefits-section">
+                <h2 class="section-title">💡 نظام مرن يناسب احتياجاتك</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">📋</div>
+                        <div class="benefit-content">
+                            <h3>قائمة مفتوحة</h3>
+                            <p>احنا مش محدودين بمنتجات معينة - لو محتاج أي حاجة، نقدر نوفرها</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🤝</div>
+                        <div class="benefit-content">
+                            <h3>حسب طلبك</h3>
+                            <p>عندك ماركة معينة بتفضلها؟ نوفرها لك بأفضل سعر</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">📦</div>
+                        <div class="benefit-content">
+                            <h3>كميات مرنة</h3>
+                            <p>من الجملة الكبيرة للكميات الصغيرة - نلبي احتياجك</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How to Start Section -->
+            <section class="features-section">
+                <h2 class="section-title">🚀 كيف تبدأ معنا؟</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3>استشارة مجانية</h3>
+                        <p>لفهم احتياجاتك واختيار المنتجات المناسبة</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>شروط واضحة</h3>
+                        <p>تعامل شفاف منذ البداية</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3>خصومات عند الطلب الأول</h3>
+                        <p>عروض خاصة للعملاء الجدد</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📖</div>
+                        <h3>شرح تفصيلي</h3>
+                        <p>لخطوط السير ومواعيد التوصيل</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact-section">
+                <h2 class="section-title">📞 تواصل معنا</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-details">
+                            <h3>واتساب</h3>
+                            <p>01XXXXXXXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-details">
+                            <h3>موبايل</h3>
+                            <p>01XXXXXXXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div class="contact-details">
+                            <h3>ساعات العمل</h3>
+                            <p>السبت - الخميس | 9 صباحًا - 11 مساءً</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-instructions">
+                    <h3>تواصل معنا على الواتساب وأرسل:</h3>
+                    <ul class="instructions-list">
+                        <li>✓ اسم المطعم أو الكافيه</li>
+                        <li>✓ موقعك (لمعرفة خط السير المناسب)</li>
+                        <li>✓ نوع المنتجات المطلوبة</li>
+                        <li>✓ الكمية التقريبية الشهرية</li>
+                    </ul>
+                    <p class="instructions-note">وسنتواصل معك لشرح التفاصيل وترتيب بداية التعامل</p>
+                </div>
+            </section>
+            </div>
+            <!-- End Marketing Content Sub-tab -->
+
+            <!-- Price List Sub-tab -->
+            <div class="sub-tab-content" id="pricelist-subtab">
+                <!-- Watermark for print (price list only) -->
+                <div class="watermark" style="display: none;">
+                    <div class="watermark-text"></div>
+                </div>
+                <!-- Company Logo (for print) -->
+                <div class="company-logo" style="display: none;">
+                    <img src="assets/aseel_logo.svg" alt="أسيل للتوريدات الغذائية" />
+                </div>
+                <section class="pricelist-section">
+                    <div class="pricelist-header">
+                        <h2 class="section-title">قائمة الأسعار</h2>
+                        <div class="pricelist-actions">
+                            <button class="btn btn-primary" id="printPriceListBtn">
+                                <span class="btn-icon">🖨️</span>
+                                <span>طباعة</span>
+                            </button>
+                            <button class="btn btn-secondary" id="exportPdfBtn">
+                                <span class="btn-icon">📄</span>
+                                <span>تصدير PDF</span>
+                            </button>
+                            <button class="btn btn-primary" id="savePricesBtn" title="التغييرات مؤقتة فقط - لن تؤثر على قاعدة البيانات">
+                                حفظ مؤقت
+                            </button>
+                            <button class="btn btn-secondary" id="clearPricesBtn" title="إعادة تعيين جميع الأسعار إلى القيم الأصلية">
+                                إعادة تعيين
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pricelist-filters">
+                        <div class="filter-group">
+                            <label for="categoryFilterPriceList">تصفية حسب الصنف:</label>
+                            <select id="categoryFilterPriceList" class="filter-select">
+                                <option value="">جميع الأصناف</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="searchPriceList">بحث:</label>
+                            <input type="text" id="searchPriceList" class="filter-input" placeholder="ابحث عن منتج...">
+                        </div>
+                    </div>
+
+                    <div class="pricelist-table-container">
+                        <table class="pricelist-table" id="pricelistTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>الكود</th>
+                                    <th>اسم المنتج</th>
+                                    <th>الصنف</th>
+                                    <th>الوحدة الصغيرة</th>
+                                    <th>سعر الوحدة الصغيرة</th>
+                                    <th>الوحدة الكبيرة</th>
+                                    <th>سعر الوحدة الكبيرة</th>
+                                    <th>معامل التحويل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pricelistTableBody">
+                                <tr>
+                                    <td colspan="9" class="loading-row">جارٍ التحميل...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pricelist-note">
+                            <small>💡 <strong>ملاحظة:</strong> معامل التحويل هو عدد الوحدات الصغيرة الموجودة في الوحدة الكبيرة (مثال: إذا كانت الوحدة الصغيرة "كيلو" والوحدة الكبيرة "طن"، فمعامل التحويل = 1000)</small>
+                        </div>
+                        <div class="pricelist-manager-signature">
+                             
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- End Price List Sub-tab -->
+            </div>
+            <!-- End Marketing Tab -->
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/header.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/marketing.js"></script>
+    <script src="scripts/pricelist.js"></script>
+</body>
+</html>
+

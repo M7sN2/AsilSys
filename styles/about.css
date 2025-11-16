@@ -1,0 +1,271 @@
+/* About Company Page Styles */
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.header-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-weight: 500;
+}
+
+.company-logo {
+    width: 80px;        /* أو 64px حسب حجم التصميم */
+    height: 80px;
+    object-fit: contain; /* يحافظ على التناسب */
+    margin-bottom: 1rem; /* مسافة أسفل اللوجو */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;  /* لتوسيطه */
+    
+    transition: all 0.3s ease;
+
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%); /* قص شكل مخصص */
+    
+  }
+  .company-logo:hover {
+    transform: scale(2.1);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  }
+
+.header-actions .btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.header-actions .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.header-actions .btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.header-actions .btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.header-actions .btn span {
+    font-size: 1.2rem;
+}
+
+/* Company Header */
+.about-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+}
+
+.company-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+.company-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.company-description:last-child {
+    margin-bottom: 0;
+}
+
+/* About Sections */
+.about-section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    transition: all var(--transition-base);
+}
+
+.about-section:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.section-icon {
+    font-size: 3rem;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.section-content {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+.section-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    text-align: justify;
+}
+
+/* Activities List */
+.activities-list,
+.clients-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.activities-list li,
+.clients-list li {
+    padding: 0.75rem 0;
+    padding-right: 2rem;
+    position: relative;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.activities-list li:last-child,
+.clients-list li:last-child {
+    border-bottom: none;
+}
+
+.activities-list li::before,
+.clients-list li::before {
+    content: "✓";
+    position: absolute;
+    right: 0;
+    top: 0.75rem;
+    color: var(--success);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Values Grid */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.value-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-base);
+}
+
+.value-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    border-color: var(--primary-light);
+}
+
+.value-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+}
+
+.value-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+.value-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        padding: 1rem;
+    }
+
+    .about-header {
+        padding: 2rem 1.5rem;
+    }
+
+    .company-name {
+        font-size: 2rem;
+    }
+
+    .about-section {
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .section-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-hashes'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self';">
+    <title>الإعدادات - نظام أسيل</title>
+    <link rel="stylesheet" href="styles/settings.css">
+    <link rel="stylesheet" href="styles/topbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Sticky Top Bar -->
+    <div class="top-bar">
+        <button class="top-bar-sidebar-toggle" id="topBarSidebarToggle" title="إخفاء/إظهار القائمة الجانبية">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="top-bar-time" id="topBarTime">
+            <span style="font-size: 12px;">🕐</span> --:--:--
+        </div>
+
+        <div class="top-bar-notifications" id="topBarNotificationsBtn" title="الإشعارات">
+            <img src="assets/bell.ico" alt="الإشعارات" />
+            <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+
+            <!-- Notifications Popup - Directly under button -->
+            <div class="notifications-popup" id="notificationsPopup">
+                <div class="popup-header">
+                    <h3>الإشعارات</h3>
+                    <button class="close-popup-btn" id="closeNotificationsBtn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="notifications-section">
+                        <h4>📦 المخزون المنخفض / نفد المخزون</h4>
+                        <div class="notifications-list" id="lowStockNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                    <div class="notifications-section">
+                        <h4>👥 عملاء رصيدهم يتخطى 10,000 ج.م</h4>
+                        <div class="notifications-list" id="highBalanceNotifications">
+                            <div class="notification-item loading">جارٍ التحميل...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="calculator.html" class="top-bar-calculator" title="آلة حاسبة">
+            <img src="assets/calculator-app-icon.ico" alt="آلة حاسبة" />
+        </a>
+
+        <div class="top-bar-user-greeting" id="topBarUserGreeting" style="display: none;">
+            <img src="assets/user_10542498.ico" alt="User" class="user-icon" />
+            <span class="greeting-text">مرحبًا، <strong id="topBarUsername">مستخدم</strong></span>
+        </div>
+
+        <button class="top-bar-logout" id="topBarLogoutBtn" title="تسجيل الخروج">
+            <img src="assets/switch.ico" alt="تسجيل الخروج" />
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">أسيل</div>
+            <p class="system-name">نظام إدارة الشركة</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="icon">🏠</span> الشاشة الرئيسية</a></li>
+            <li><a href="products.html"><span class="icon">📦</span> المنتجات</a></li>
+            <li><a href="customers.html"><span class="icon">👥</span> العملاء <span class="sidebar-badge" id="inactiveCustomersBadge" style="display: none;">0</span></a></li>
+            <li><a href="suppliers.html"><span class="icon">🏢</span> الموردين</a></li>
+            <li><a href="sales.html"><span class="icon">💰</span> المبيعات</a></li>
+            <li><a href="delivery-notes.html"><span class="icon">📋</span> أذون الصرف</a></li>
+            <li><a href="receipts.html"><span class="icon">💵</span> سندات القبض</a></li>
+            <li><a href="payments.html"><span class="icon">💸</span> سندات الصرف</a></li>
+            <li><a href="purchases.html"><span class="icon">🛒</span> المشتريات</a></li>
+            <li><a href="inventory.html"><span class="icon">📝</span> إدارة الجرد والمرتجعات</a></li>
+            <li><a href="assets.html"><span class="icon">🏛️</span> أصول الشركة</a></li>
+            <li><a href="reports.html"><span class="icon">📊</span> حساب الأرباح</a></li>
+            <li><a href="expenses.html"><span class="icon">💼</span> المصاريف التشغيلية</a></li>
+            <li><a href="backup.html"><span class="icon">💾</span> النسخ الاحتياطي</a></li>
+            <li><a href="action-logs.html"><span class="icon">📋</span> سجل الحركات</a></li>
+            <li><a href="users.html"><span class="icon">👤</span> إدارة المستخدمين والصلاحيات</a></li>
+            <li><a href="settings.html" class="active"><span class="icon">⚙️</span> الإعدادات</a></li>
+            <li><a href="about.html"><span class="icon">🧊</span> عن الشركة</a></li>
+            <li><a href="marketing.html"><span class="icon">📢</span> العرض التسويقي</a></li>
+            <li class="logout-item">
+                <button class="logout-btn" title="تسجيل الخروج">
+                    <img src="assets/logout-16.ico" alt="تسجيل الخروج" class="icon">
+                    <span>تسجيل الخروج</span>
+                </button>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <p class="copyright-text">© 2025 نظام أسيل — تم التطوير بواسطة المهندس محمد محسن. جميع الحقوق محفوظة.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <h1>الإعدادات</h1>
+            <p class="welcome-text">معلومات الشركة</p>
+        </div>
+
+        <!-- Settings Form -->
+        <div class="settings-container">
+            <div class="settings-intro">
+                <div class="intro-icon">⚙️</div>
+                <div class="intro-content">
+                    <h2>إعدادات الشركة</h2>
+                    <p>قم بتحديث معلومات الشركة التي ستظهر في الفواتير والمستندات</p>
+                </div>
+            </div>
+
+            <form id="companySettingsForm" class="settings-form">
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏢</div>
+                        <div>
+                            <h2>معلومات الشركة الأساسية</h2>
+                            <p class="section-description">المعلومات الأساسية التي تظهر في ترويسة الفواتير</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="companyName">
+                                <span class="label-icon">🏷️</span>
+                                اسم الشركة <span class="required">*</span>
+                            </label>
+                            <input type="text" id="companyName" name="name" required placeholder="أدخل اسم الشركة">
+                            <small class="field-hint">سيظهر هذا الاسم في أعلى الفواتير</small>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="companyAddress">
+                                <span class="label-icon">📍</span>
+                                العنوان
+                            </label>
+                            <textarea id="companyAddress" name="address" rows="3" placeholder="أدخل عنوان الشركة الكامل"></textarea>
+                            <small class="field-hint">العنوان الكامل للشركة</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxId">
+                                <span class="label-icon">📋</span>
+                                السجل الضريبي
+                            </label>
+                            <input type="text" id="taxId" name="taxId" placeholder="أدخل الرقم الضريبي">
+                            <small class="field-hint">الرقم الضريبي للشركة</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commercialRegister">
+                                <span class="label-icon">📄</span>
+                                السجل التجاري
+                            </label>
+                            <input type="text" id="commercialRegister" name="commercialRegister" placeholder="أدخل رقم السجل التجاري">
+                            <small class="field-hint">رقم السجل التجاري</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                <span class="label-icon">📞</span>
+                                الهاتف
+                            </label>
+                            <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الهاتف">
+                            <small class="field-hint">رقم الهاتف الأرضي</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mobile">
+                                <span class="label-icon">📱</span>
+                                المحمول
+                            </label>
+                            <input type="tel" id="mobile" name="mobile" placeholder="أدخل رقم المحمول">
+                            <small class="field-hint">رقم الهاتف المحمول</small>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="email">
+                                <span class="label-icon">✉️</span>
+                                البريد الإلكتروني
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني">
+                            <small class="field-hint">البريد الإلكتروني الرسمي للشركة</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxRate">
+                                <span class="label-icon">📊</span>
+                                نسبة الضريبة (%)
+                            </label>
+                            <input type="number" id="taxRate" name="taxRate" step="0.01" min="0" max="100" placeholder="" value="0">
+                            <small class="field-hint">نسبة ضريبة القيمة المضافة الافتراضية للفواتير</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <div>
+                            <h2>معلومات المندوب والمحاسب</h2>
+                            <p class="section-description">المعلومات التي ستظهر في الفواتير</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="salesRepName">
+                                <span class="label-icon">👨‍💼</span>
+                                اسم المندوب
+                            </label>
+                            <input type="text" id="salesRepName" name="salesRepName" placeholder="أدخل اسم المندوب">
+                            <small class="field-hint">اسم المندوب الذي سيظهر في الفواتير</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="salesRepPhone">
+                                <span class="label-icon">📱</span>
+                                رقم المندوب
+                            </label>
+                            <input type="tel" id="salesRepPhone" name="salesRepPhone" placeholder="أدخل رقم المندوب">
+                            <small class="field-hint">رقم الهاتف المحمول للمندوب</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accountantName">
+                                <span class="label-icon">🧮</span>
+                                اسم المحاسب
+                            </label>
+                            <input type="text" id="accountantName" name="accountantName" placeholder="أدخل اسم المحاسب">
+                            <small class="field-hint">اسم المحاسب الذي سيظهر في الفواتير</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accountantPhone">
+                                <span class="label-icon">📞</span>
+                                رقم المحاسب
+                            </label>
+                            <input type="tel" id="accountantPhone" name="accountantPhone" placeholder="أدخل رقم المحاسب">
+                            <small class="field-hint">رقم الهاتف المحمول للمحاسب</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏪</div>
+                        <div>
+                            <h2>معلومات أمين المخزن / التلاجة</h2>
+                            <p class="section-description">المعلومات التي ستظهر في أذون الصرف</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="warehouseKeeperName">
+                                <span class="label-icon">👤</span>
+                                اسم أمين المخزن / التلاجة
+                            </label>
+                            <input type="text" id="warehouseKeeperName" name="warehouseKeeperName" placeholder="أدخل اسم أمين المخزن أو التلاجة">
+                            <small class="field-hint">اسم أمين المخزن الذي سيظهر في أذون الصرف</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="warehouseKeeperPhone">
+                                <span class="label-icon">📱</span>
+                                رقم أمين المخزن / التلاجة
+                            </label>
+                            <input type="tel" id="warehouseKeeperPhone" name="warehouseKeeperPhone" placeholder="أدخل رقم أمين المخزن أو التلاجة">
+                            <small class="field-hint">رقم الهاتف المحمول لأمين المخزن</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">📝</div>
+                        <div>
+                            <h2>نص التعهد</h2>
+                            <p class="section-description">النص الذي سيظهر في أسفل الفواتير</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="commitmentText">
+                                <span class="label-icon">📜</span>
+                                نص التعهد
+                            </label>
+                            <textarea id="commitmentText" name="commitmentText" rows="6" placeholder="أدخل نص التعهد الذي سيظهر في الفواتير"></textarea>
+                            <small class="field-hint">هذا النص سيظهر في قسم "إقرار واستلام" في الفواتير</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">📢</div>
+                        <div>
+                            <h2>معلومات التواصل التسويقي</h2>
+                            <p class="section-description">المعلومات التي ستظهر في صفحة العرض التسويقي</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="marketingWhatsApp">
+                                <span class="label-icon">💬</span>
+                                رقم الواتساب
+                            </label>
+                            <input type="tel" id="marketingWhatsApp" name="marketingWhatsApp" placeholder="01XXXXXXXXX">
+                            <small class="field-hint">رقم الواتساب الذي سيظهر في صفحة العرض التسويقي</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="marketingMobile">
+                                <span class="label-icon">📱</span>
+                                رقم الموبايل
+                            </label>
+                            <input type="tel" id="marketingMobile" name="marketingMobile" placeholder="01XXXXXXXXX">
+                            <small class="field-hint">رقم الموبايل الذي سيظهر في صفحة العرض التسويقي</small>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="marketingWorkingHours">
+                                <span class="label-icon">🕐</span>
+                                ساعات العمل
+                            </label>
+                            <input type="text" id="marketingWorkingHours" name="marketingWorkingHours" placeholder="السبت - الخميس | 9 صباحًا - 11 مساءً">
+                            <small class="field-hint">ساعات العمل التي ستظهر في صفحة العرض التسويقي</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">👔</div>
+                        <div>
+                            <h2>معلومات إدارة الشركة</h2>
+                            <p class="section-description">المعلومات التي ستظهر في طباعة قائمة الأسعار</p>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="managerName">
+                                <span class="label-icon">👤</span>
+                                اسم مدير إدارة الشركة
+                            </label>
+                            <input type="text" id="managerName" name="managerName" placeholder="أدخل اسم مدير إدارة الشركة">
+                            <small class="field-hint">اسم مدير إدارة الشركة الذي سيظهر في طباعة قائمة الأسعار</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="managerMobile">
+                                <span class="label-icon">📱</span>
+                                رقم موبايل مدير إدارة الشركة
+                            </label>
+                            <input type="tel" id="managerMobile" name="managerMobile" placeholder="أدخل رقم موبايل مدير إدارة الشركة">
+                            <small class="field-hint">رقم الموبايل الذي سيظهر في طباعة قائمة الأسعار</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        <span class="btn-icon">🔄</span>
+                        <span>إعادة تعيين</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon">💾</span>
+                        <span>حفظ التغييرات</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="scripts/logout.js"></script>
+    <script src="scripts/header.js"></script>
+    <script src="scripts/permissions.js"></script>
+    <script src="scripts/sidebar.js"></script>
+    <script src="scripts/settings.js"></script>
+</body>
+</html>
