@@ -1,0 +1,661 @@
+/* ===================================
+   Sticky Top Bar - Modern Design
+   =================================== */
+
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    height: 55px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+    gap: 16px;
+    direction: rtl;
+    transition: right var(--transition-base), width var(--transition-base);
+}
+
+/* Sidebar Toggle Button in Top Bar */
+.top-bar-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    /* Simplified background for low-end devices - solid color instead of gradient */
+    background: #f1f5f9;
+    border: 1.5px solid #e2e8f0;
+    cursor: pointer;
+    /* Optimized transitions - only animate necessary properties, shorter duration */
+    transition: background 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.15s ease;
+    padding: 0;
+    margin-left: auto;
+    order: -1;
+    flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    /* CSS containment for better performance on low-end devices */
+    contain: layout style paint;
+    /* Only use GPU acceleration when actually needed */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Use gradient only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+/* Only use pseudo-element on capable devices - skip on low-end */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle::before {
+        content: '';
+        position: absolute;
+        /* Fallback for older browsers */
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        /* Modern browsers */
+        inset: 0;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, rgba(139, 69, 19, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        transform: translateZ(0);
+        pointer-events: none; /* Don't interfere with clicks */
+    }
+}
+
+.top-bar-sidebar-toggle:hover {
+    /* Simplified for low-end devices */
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Enhanced hover only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle:hover {
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle:hover::before {
+        opacity: 1;
+    }
+}
+
+.top-bar-sidebar-toggle:active {
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.top-bar-sidebar-toggle svg {
+    width: 22px;
+    height: 22px;
+    stroke: #475569;
+    stroke-width: 2.5;
+    /* Optimized transition - shorter duration for low-end devices */
+    transition: stroke 0.2s ease,
+                transform 0.2s ease;
+    position: relative;
+    z-index: 1;
+    /* Only use transform for GPU acceleration when needed */
+    transform: translateZ(0);
+}
+
+/* Enhanced transitions only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle svg {
+        transition: stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+.top-bar-sidebar-toggle:hover svg {
+    stroke: #1e293b;
+    /* Skip rotation on low-end devices - only on capable devices */
+    transform: rotate(5deg);
+}
+
+/* Reduce animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .top-bar-sidebar-toggle,
+    .top-bar-sidebar-toggle svg,
+    .top-bar-sidebar-toggle::before {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .top-bar-sidebar-toggle:hover svg {
+        transform: none !important;
+    }
+    
+    .top-bar-sidebar-toggle:hover {
+        transform: none !important;
+    }
+}
+
+.top-bar-sidebar-toggle:active svg {
+    transform: rotate(0deg) scale(0.95);
+}
+
+/* Animated state when sidebar is hidden - Fallback for browsers without :has() support */
+.sidebar.hidden ~ .top-bar .top-bar-sidebar-toggle svg {
+    transform: rotate(180deg);
+}
+
+.sidebar.hidden ~ .top-bar .top-bar-sidebar-toggle:hover svg {
+    transform: rotate(185deg);
+}
+
+/* Active state when sidebar is visible - Fallback for browsers without :has() support */
+.sidebar:not(.hidden) ~ .top-bar .top-bar-sidebar-toggle {
+    /* Simplified for low-end devices */
+    background: #ffedd5;
+    border-color: #fed7aa;
+}
+
+/* Gradient only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .sidebar:not(.hidden) ~ .top-bar .top-bar-sidebar-toggle {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    }
+}
+
+.sidebar:not(.hidden) ~ .top-bar .top-bar-sidebar-toggle svg {
+    stroke: #9a3412;
+}
+
+/* Modern browser support with :has() - Progressive enhancement */
+@supports selector(:has(*)) {
+    body:has(.sidebar.hidden) .top-bar-sidebar-toggle svg {
+        transform: rotate(180deg);
+    }
+    
+    body:has(.sidebar.hidden) .top-bar-sidebar-toggle:hover svg {
+        transform: rotate(185deg);
+    }
+    
+    body:has(.sidebar:not(.hidden)) .top-bar-sidebar-toggle {
+        background: #ffedd5;
+        border-color: #fed7aa;
+    }
+}
+
+/* Gradient only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    @supports selector(:has(*)) {
+        body:has(.sidebar:not(.hidden)) .top-bar-sidebar-toggle {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        }
+        
+        body:has(.sidebar:not(.hidden)) .top-bar-sidebar-toggle svg {
+            stroke: #9a3412;
+        }
+    }
+}
+
+/* Toggle button states managed by JavaScript for better compatibility */
+.top-bar-sidebar-toggle.sidebar-hidden svg {
+    transform: rotate(180deg);
+}
+
+.top-bar-sidebar-toggle.sidebar-hidden:hover svg {
+    transform: rotate(185deg);
+}
+
+.top-bar-sidebar-toggle.sidebar-visible {
+    /* Simplified for low-end devices */
+    background: #ffedd5;
+    border-color: #fed7aa;
+}
+
+/* Gradient only on capable devices */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .top-bar-sidebar-toggle.sidebar-visible {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    }
+}
+
+.top-bar-sidebar-toggle.sidebar-visible svg {
+    stroke: #9a3412;
+}
+
+.sidebar.hidden ~ .top-bar {
+    right: 0;
+    width: 100%;
+}
+
+.sidebar.collapsed ~ .top-bar {
+    right: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+/* Fallback for browsers without :has() support */
+@supports selector(:has(*)) {
+    body:has(.sidebar.hidden) .top-bar {
+        right: 0;
+        width: 100%;
+    }
+    
+    body:has(.sidebar.collapsed) .top-bar {
+        right: var(--sidebar-collapsed-width);
+        width: calc(100% - var(--sidebar-collapsed-width));
+    }
+}
+
+/* Adjust main content to account for top bar */
+body {
+    padding-top: 55px;
+}
+
+.main-content {
+    margin-top: 0 !important;
+    padding-top: 90px !important; /* Increased to prevent overlap with top bar */
+}
+
+/* Ensure sidebar doesn't overlap top bar - handled in main.css */
+
+/* Top Bar Items */
+.top-bar-item {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    white-space: nowrap;
+}
+
+.top-bar-item:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* Clock */
+.top-bar-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1e293b;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    white-space: nowrap;
+    font-family: 'Segoe UI', Tahoma, Arial, 'Courier New', monospace;
+    letter-spacing: 0.2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    flex-wrap: nowrap;
+}
+
+.top-bar-time span {
+    white-space: nowrap;
+}
+
+.top-bar-time:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-color: #cbd5e1;
+}
+
+/* Notifications Button */
+.top-bar-notifications {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    z-index: 10002; /* Higher than popup to ensure button is clickable */
+}
+
+.top-bar-notifications:hover {
+    background: #f1f5f9;
+}
+
+.top-bar-notifications img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Calculator Button */
+.top-bar-calculator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.top-bar-calculator:hover {
+    background: #f1f5f9;
+}
+
+.top-bar-calculator img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* User Greeting */
+.top-bar-user-greeting {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    padding: 6px 14px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.top-bar-user-greeting:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-color: #cbd5e1;
+}
+
+.top-bar-user-greeting .user-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.top-bar-user-greeting .greeting-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.top-bar-user-greeting .greeting-text strong {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Logout Button */
+.top-bar-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.top-bar-logout:hover {
+    background: #fee2e2;
+}
+
+.top-bar-logout img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* Notifications Popup */
+.notifications-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 380px;
+    max-height: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    z-index: 10003 !important; /* Very high z-index to appear above everything */
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.notifications-popup.active {
+    display: flex;
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, var(--primary) 0%, #6d3410 100%);
+    color: white;
+}
+
+.popup-header h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.close-popup-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-popup-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.popup-content {
+    padding: 12px;
+    overflow-y: auto;
+    max-height: 440px;
+}
+
+.notifications-section {
+    margin-bottom: 16px;
+}
+
+.notifications-section:last-child {
+    margin-bottom: 0;
+}
+
+.notifications-section h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.notification-item {
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.notification-item:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.notification-item.loading,
+.notification-item.empty {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: default;
+}
+
+.notification-item-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.notification-item-details {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .top-bar {
+        padding: 0 12px;
+        gap: 8px;
+        right: 0 !important;
+        width: 100% !important;
+    }
+    
+    .top-bar-user-greeting {
+        display: none !important;
+    }
+    
+    .top-bar-time {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+    
+    .notifications-popup {
+        right: 12px;
+        width: calc(100% - 24px);
+        max-width: 380px;
+    }
+    
+    .top-bar-sidebar-toggle {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .top-bar-sidebar-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .top-bar-user-greeting .user-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-bar {
+        height: 50px;
+        padding: 0 8px;
+        gap: 6px;
+    }
+    
+    body {
+        padding-top: 50px;
+    }
+    
+    .top-bar-item,
+    .top-bar-notifications,
+    .top-bar-calculator,
+    .top-bar-logout,
+    .top-bar-sidebar-toggle {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+    }
+    
+    .top-bar-notifications img,
+    .top-bar-calculator img {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .top-bar-logout img {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .top-bar-sidebar-toggle svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .top-bar-time {
+        font-size: 0.7rem;
+        padding: 6px 8px;
+    }
+}
+
