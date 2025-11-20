@@ -178,19 +178,7 @@ A comprehensive inventory and accounting management system built as a desktop ap
 
 ---
 
-## 🔐 Default Login Credentials
 
-### Admin Account
-- **Username:** `admin`
-- **Password:** `admin`
-
-### Regular User Account
-- **Username:** `user`
-- **Password:** `1234`
-
-> ⚠️ **Warning:** Please change default passwords immediately after first installation!
-
----
 
 ## 📁 Project Structure
 
