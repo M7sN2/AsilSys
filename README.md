@@ -27,7 +27,7 @@ A comprehensive inventory and accounting management system built as a desktop ap
 - Save invoices as PDF files
 - Link invoices to delivery notes
 
-### 🛒 Purchase Management
+### 🛒 Purchase Management````
 - Create multi-item purchase invoices
 - Automatic inventory updates on purchase
 - Automatic supplier balance updates
@@ -327,51 +327,12 @@ MIT License
 
 ---
 
-## 👨‍💻 Developer
-
-**Engineer Mohamed Mohsen**
-
----
-
-## 📞 Technical Support
-
-For help and technical support, please contact the developer.
-
----
-
-## 📚 Additional Documentation
-
-- [SYSTEM_DOCUMENTATION_AR.md](SYSTEM_DOCUMENTATION_AR.md) - System documentation in Arabic
-- [SYSTEM_DESIGN.md](SYSTEM_DESIGN.md) - System design
-- [DATABASE_ERD.md](DATABASE_ERD.md) - Database ERD
-- [CHANGELOG.md](CHANGELOG.md) - Changelog
-- [TESTING_STRATEGY_AR.md](TESTING_STRATEGY_AR.md) - Testing strategy
-
----
-
-## 🔄 Versions
-
-### Version 1.0.6 (Current)
-- General fixes and improvements
-
-### Version 1.0.4
-- Fixed return quantity logic in transaction log
-- Improvements in transaction type display
-
-### Version 1.0.2
-- Fixed application closing after login
-- Fixed issue with two windows appearing together
-- Improved error handling
-
----
-
 ## ⚠️ Important Notes
 
 - ⚠️ Application does not require internet to work
 - ⚠️ All data is stored locally on your device
 - ⚠️ Do not delete the application folder manually (use uninstall)
 - ⚠️ Perform regular data backups
-- ⚠️ Change default passwords immediately
 
 ---
 
